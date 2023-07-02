@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NMS Address Encoder/Decoder</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      overflow-y: auto;
+  }
+
+  h1 {
+      margin-bottom: 20px;
+  }
+
+  .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+  }
+
+  .glyph-container {
+    margin: 5px;
+    border: 1px solid #ccc;
+    width: 45px;
+    text-align: center;
+  }
+
+  .image {
+    margin: 0px;
+    border-bottom: 1px solid #ccc;
+    width: 45px;
+  }
+
+  .image_num {
+    margin: 0px;
+    text-align: center;
+    width: 45px;
+    font-size: 12px;
+  }
+
+  #UA, #GA {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    margin-bottom: 10px;
+  }
+
+  #glyph {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    height: 60px;
+    width: 400px;
+    background-color: #282828;
+    -webkit-border-radius:5px;
+  }
+
+  #glyph .glyph-container {
+    margin: 5px 0px 5px 0px;
+    width: 30px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+
+  #glyph .image {
+    border: 0px;
+    width: 30px;
+  }
+
+  #glyph .image_num {
+    text-align: center;
+    border-top: 1px solid #ccc;
+    width: 30px;
+    height: 10px;
+    font-size: 12px;
+  }
+
+  #galaxy, #planet {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    text-align: left;
+    font-size: 14px;
+    border: none;
+    margin-bottom: 20px;
+    -webkit-border-radius:3px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    -webkit-border-radius:5px;
+  }
+
+  .disableBtn {
+      background-color: red;
+  }
+
+  .button-container {
+      display: flex;
+      gap: 10px;
+  }
+
+  textarea {
+    resize: none;
+    width: 400px;
+  }
+
+  .msg {
+    position: fixed;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    background-color: #ffff00;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .zoom_outer {
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+  }
+  
+  #zoom {
+    width: 100%;
+    height: 100%;
+    transform-origin: 0px 0px;
+    transform: scale(1) translate(0px, 0px);
+    cursor: grab;
+  }
+  
+  div#zoom > img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .thumbnail {
+    max-width: 100px;
+    max-height: 100px;
+    cursor: pointer;
+  }
+  
+  p#text{
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  div#div_file{
+    position:relative;
+    padding: 10px 20px;
+    height: 16px;
+    margin: 10px;
+    background-color: #2499e3;
+    -webkit-border-radius:5px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  input#fileInput{
+    position:absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    width:100%;
+    height:100%;
+    opacity: 0;
+  }
+
+  .input_container label{
+    display: inline-block;
+    width: 200px;
+    text-align: right;
+  }
+
+  input, textarea {
+    -webkit-border-radius:5px;    
+  }
+
+</style>
+<script>
+    function showMessage() {
+      var msg = document.getElementById("msg");
+      msg.style.display = "block";
+
+      setTimeout(function() {
+        msg.style.display = "none";
+      }, 3000); // Hide msg after 3 seconds (3000 ms)
+  }
+</script>
+</head>
+<body>
+  <h1>NMS Address Encoder/Decoder</h1>
+  <div id="div_file">
+  <p id="text">Open images</p><input type="file" id="fileInput" webkitdirectory multiple>
+  </div>
+  <div id="thumbnails"></div>
+  <div class="zoom_outer" id="resizeable" style="width: 100%; height: 100px; border: 1px solid white; position: relative; display: none;">
+    <div id="zoom">
+      <img id="zoomImg">
+  </div>
+  <div id="resize-handle" style="width: 100%; height: 5px; background-color: #888; position: absolute; bottom: 0; right: 0; cursor: ns-resize;">
+  </div>
+</div>
+<div class="container">
+    <div onclick="concatID('0')" class="glyph-container"><img src="PORTALSYMBOL.0.png" class="image"><div class="image_num">0</div></div>
+    <div onclick="concatID('1')" class="glyph-container"><img src="PORTALSYMBOL.1.png" class="image"><div class="image_num">1</div></div>
+    <div onclick="concatID('2')" class="glyph-container"><img src="PORTALSYMBOL.2.png" class="image"><div class="image_num">2</div></div>
+    <div onclick="concatID('3')" class="glyph-container"><img src="PORTALSYMBOL.3.png" class="image"><div class="image_num">3</div></div>
+    <div onclick="concatID('4')" class="glyph-container"><img src="PORTALSYMBOL.4.png" class="image"><div class="image_num">4</div></div>
+    <div onclick="concatID('5')" class="glyph-container"><img src="PORTALSYMBOL.5.png" class="image"><div class="image_num">5</div></div>
+    <div onclick="concatID('6')" class="glyph-container"><img src="PORTALSYMBOL.6.png" class="image"><div class="image_num">6</div></div>
+    <div onclick="concatID('7')" class="glyph-container"><img src="PORTALSYMBOL.7.png" class="image"><div class="image_num">7</div></div>
+    <div onclick="concatID('8')" class="glyph-container"><img src="PORTALSYMBOL.8.png" class="image"><div class="image_num">8</div></div>
+    <div onclick="concatID('9')" class="glyph-container"><img src="PORTALSYMBOL.9.png" class="image"><div class="image_num">9</div></div>
+    <div onclick="concatID('A')" class="glyph-container"><img src="PORTALSYMBOL.A.png" class="image"><div class="image_num">A</div></div>
+    <div onclick="concatID('B')" class="glyph-container"><img src="PORTALSYMBOL.B.png" class="image"><div class="image_num">B</div></div>
+    <div onclick="concatID('C')" class="glyph-container"><img src="PORTALSYMBOL.C.png" class="image"><div class="image_num">C</div></div>
+    <div onclick="concatID('D')" class="glyph-container"><img src="PORTALSYMBOL.D.png" class="image"><div class="image_num">D</div></div>
+    <div onclick="concatID('E')" class="glyph-container"><img src="PORTALSYMBOL.E.png" class="image"><div class="image_num">E</div></div>
+    <div onclick="concatID('F')" class="glyph-container"><img src="PORTALSYMBOL.F.png" class="image"><div class="image_num">F</div></div>
+</div>
+
+<div id="glyph">
+</div>
+
+<br>
+
+<div class="button-container">
+    <button id="cleanBtn" onclick="clean()">Clear</button>
+    <button id="deleteLastBtn" onclick="deleteLast()" disabled class="disableBtn">Delete Last Glyph</button>
+</div>
+<br>
+<div class="button-container">
+    <button id="copiarBtn" onclick="copyUA()" disabled class="copybtn disableBtn">Copy UA</button>
+    <button id="copiarBtn2" onclick="copyGA()" disabled class="copybtn disableBtn">Copy GA</button>
+    <button id="copiarBtn3" onclick="copyUADecoded()" disabled class="copybtn disableBtn">Copy UA (Decoded)</button>
+</div>
+
+<br>
+
+<div>
+  <label for="galaxy">Galaxy:</label>
+  <select id="galaxy" onchange="decodeUA()">
+    <option value="00">1.Euclides</option>
+    <option value="01">2.Dimensión de Hilbert</option>
+    <option value="02">3.Calipso</option>
+    <option value="03">4.Dimensión de Hespérides</option>
+    <option value="04">5.Hyades</option>
+    <option value="05">6.Ickjamatew</option>
+    <option value="06">7.Budullangr</option>
+    <option value="07">8.Kikolgallr</option>
+    <option value="08">9.Eltiensleen</option>
+    <option value="09">10.Eissentam</option>
+    <option value="0A">11.Elkupalos</option>
+    <option value="0B">12.Aptarkaba</option>
+    <option value="0C">13.Ontiniangp</option>
+    <option value="0D">14.Odiwagiri</option>
+    <option value="0E">15.Ogtialabi</option>
+    <option value="0F">16.Muhacksonto</option>
+    <option value="10">17.Hitonskyer</option>
+    <option value="11">18.Rerasmutul</option>
+    <option value="12">19.Isdoraijung</option>
+    <option value="13">20.Doctinawyra</option>
+    <option value="14">21.Loychazinq</option>
+    <option value="15">22.Zukasizawa</option>
+    <option value="16">23.Ekwathore</option>
+    <option value="17">24.Yeberhahne</option>
+    <option value="18">25.Twerbetek</option>
+    <option value="19">26.Sivarates</option>
+    <option value="1A">27.Eajerandal</option>
+    <option value="1B">28.Aldukesci</option>
+    <option value="1C">29.Wotyarogii</option>
+    <option value="1D">30.Sudzerbal</option>
+    <option value="1E">31.Maupenzhay</option>
+    <option value="1F">32.Sugueziume</option>
+    <option value="20">33.Brogoweldian</option>
+    <option value="21">34.Ehbogdenbu</option>
+    <option value="22">35.Ijsenufryos</option>
+    <option value="23">36.Nipikulha</option>
+    <option value="24">37.Autsurabin</option>
+    <option value="25">38.Lusontrygiamh</option>
+    <option value="26">39.Rewmanawa</option>
+    <option value="27">40.Ethiophodhe</option>
+    <option value="28">41.Urastrykle</option>
+    <option value="29">42.Xobeurindj</option>
+    <option value="2A">43.Oniijialdu</option>
+    <option value="2B">44.Wucetosucc</option>
+    <option value="2C">45.Ebyeloof</option>
+    <option value="2D">46.Odyavanta</option>
+    <option value="2E">47.Milekistri</option>
+    <option value="2F">48.Waferganh</option>
+    <option value="30">49.Agnusopwit</option>
+    <option value="31">50.Teyaypilny</option>
+    <option value="32">51.Zalienkosm</option>
+    <option value="33">52.Ladgudiraf</option>
+    <option value="34">53.Mushonponte</option>
+    <option value="35">54.Amsentisz</option>
+    <option value="36">55.Fladiselm</option>
+    <option value="37">56.Laanawemb</option>
+    <option value="38">57.Ilkerloor</option>
+    <option value="39">58.Davanossi</option>
+    <option value="3A">59.Ploehrliou</option>
+    <option value="3B">60.Corpinyaya</option>
+    <option value="3C">61.Leckandmeram</option>
+    <option value="3D">62.Quulngais</option>
+    <option value="3E">63.Nokokipsechl</option>
+    <option value="3F">64.Rinblodesa</option>
+    <option value="40">65.Loydporpen</option>
+    <option value="41">66.Ibtrevskip</option>
+    <option value="42">67.Elkowaldb</option>
+    <option value="43">68.Heholhofsko</option>
+    <option value="44">69.Yebrilowisod</option>
+    <option value="45">70.Husalvangewi</option>
+    <option value="46">71.Ovna'uesed</option>
+    <option value="47">72.Bahibusey</option>
+    <option value="48">73.Nuybeliaure</option>
+    <option value="49">74.Doshawchuc</option>
+    <option value="4A">75.Ruckinarkh</option>
+    <option value="4B">76.Thorettac</option>
+    <option value="4C">77.Nuponoparau</option>
+    <option value="4D">78.Moglaschil</option>
+    <option value="4E">79.Uiweupose</option>
+    <option value="4F">80.Nasmilete</option>
+    <option value="50">81.Ekdaluskin</option>
+    <option value="51">82.Hakapanasy</option>
+    <option value="52">83.Dimonimba</option>
+    <option value="53">84.Cajaccari</option>
+    <option value="54">85.Olonerovo</option>
+    <option value="55">86.Umlanswick</option>
+    <option value="56">87.Henayliszm</option>
+    <option value="57">88.Utzenmate</option>
+    <option value="58">89.Umirpaiya</option>
+    <option value="59">90.Paholiang</option>
+    <option value="5A">91.Iaereznika</option>
+    <option value="5B">92.Yudukagath</option>
+    <option value="5C">93.Boealalosnj</option>
+    <option value="5D">94.Yaevarcko</option>
+    <option value="5E">95.Coellosipp</option>
+    <option value="5F">96.Wayndohalou</option>
+    <option value="60">97.Smoduraykl</option>
+    <option value="61">98.Apmaneessu</option>
+    <option value="62">99.Hicanpaav</option>
+    <option value="63">100.Akvasanta</option>
+    <option value="64">101.Tuychelisaor</option>
+    <option value="65">102.Rivskimbe</option>
+    <option value="66">103.Daksanquix</option>
+    <option value="67">104.Kissonlin</option>
+    <option value="68">105.Aediabiel</option>
+    <option value="69">106.Ulosaginyik</option>
+    <option value="6A">107.Roclaytonycar</option>
+    <option value="6B">108.Kichiaroa</option>
+    <option value="6C">109.Irceauffey</option>
+    <option value="6D">110.Nudquathsenfe</option>
+    <option value="6E">111.Getaizakaal</option>
+    <option value="6F">112.Hansolmien</option>
+    <option value="70">113.Bloytisagra</option>
+    <option value="71">114.Ladsenlay</option>
+    <option value="72">115.Luyugoslasr</option>
+    <option value="73">116.Ubredhatk</option>
+    <option value="74">117.Cidoniana</option>
+    <option value="75">118.Jasinessa</option>
+    <option value="76">119.Torweierf</option>
+    <option value="77">120.Saffneckm</option>
+    <option value="78">121.Thnistner</option>
+    <option value="79">122.Dotusingg</option>
+    <option value="7A">123.Luleukous</option>
+    <option value="7B">124.Jelmandan</option>
+    <option value="7C">125.Otimanaso</option>
+    <option value="7D">126.Enjaxusanto</option>
+    <option value="7E">127.Sezviktorew</option>
+    <option value="7F">128.Zikehpm</option>
+    <option value="80">129.Bephembah</option>
+    <option value="81">130.Broomerrai</option>
+    <option value="82">131.Meximicka</option>
+    <option value="83">132.Venessika</option>
+    <option value="84">133.Gaiteseling</option>
+    <option value="85">134.Zosakasiro</option>
+    <option value="86">135.Drajayanes</option>
+    <option value="87">136.Ooibekuar</option>
+    <option value="88">137.Urckiansi</option>
+    <option value="89">138.Dozivadido</option>
+    <option value="8A">139.Emiekereks</option>
+    <option value="8B">140.Meykinunukur</option>
+    <option value="8C">141.Kimycuristh</option>
+    <option value="8D">142.Roansfien</option>
+    <option value="8E">143.Isgarmeso</option>
+    <option value="8F">144.Daitibeli</option>
+    <option value="90">145.Gucuttarik</option>
+    <option value="91">146.Enlaythie</option>
+    <option value="92">147.Drewweste</option>
+    <option value="93">148.Akbulkabi</option>
+    <option value="94">149.Homskiw</option>
+    <option value="95">150.Zavainlani</option>
+    <option value="96">151.Jewijkmas</option>
+    <option value="97">152.Itlhotagra</option>
+    <option value="98">153.Podalicess</option>
+    <option value="99">154.Hiviusauer</option>
+    <option value="9A">155.Halsebenk</option>
+    <option value="9B">156.Puikitoac</option>
+    <option value="9C">157.Gaybakuaria</option>
+    <option value="9D">158.Grbodubhe</option>
+    <option value="9E">159.Rycempler</option>
+    <option value="9F">160.Indjalala</option>
+    <option value="A0">161.Fontenikk</option>
+    <option value="A1">162.Pasycihelwhee</option>
+    <option value="A2">163.Ikbaksmit</option>
+    <option value="A3">164.Telicianses</option>
+    <option value="A4">165.Oyleyzhan</option>
+    <option value="A5">166.Uagerosat</option>
+    <option value="A6">167.Impoxectin</option>
+    <option value="A7">168.Twoodmand</option>
+    <option value="A8">169.Hilfsesorbs</option>
+    <option value="A9">170.Ezdaranit</option>
+    <option value="AA">171.Wiensanshe</option>
+    <option value="AB">172.Ewheelonc</option>
+    <option value="AC">173.Litzmantufa</option>
+    <option value="AD">174.Emarmatosi</option>
+    <option value="AE">175.Mufimbomacvi</option>
+    <option value="AF">176.Wongquarum</option>
+    <option value="B0">177.Hapirajua</option>
+    <option value="B1">178.Igbinduina</option>
+    <option value="B2">179.Wepaitvas</option>
+    <option value="B3">180.Sthatigudi</option>
+    <option value="B4">181.Yekathsebehn</option>
+    <option value="B5">182.Ebedeagurst</option>
+    <option value="B6">183.Nolisonia</option>
+    <option value="B7">184.Ulexovitab</option>
+    <option value="B8">185.Iodhinxois</option>
+    <option value="B9">186.Irroswitzs</option>
+    <option value="BA">187.Bifredait</option>
+    <option value="BB">188.Beiraghedwe</option>
+    <option value="BC">189.Yeonatlak</option>
+    <option value="BD">190.Cugnatachh</option>
+    <option value="BE">191.Nozoryenki</option>
+    <option value="BF">192.Ebralduri</option>
+    <option value="C0">193.Evcickcandj</option>
+    <option value="C1">194.Ziybosswin</option>
+    <option value="C2">195.Heperclait</option>
+    <option value="C3">196.Sugiuniam</option>
+    <option value="C4">197.Aaseertush</option>
+    <option value="C5">198.Uglyestemaa</option>
+    <option value="C6">199.Horeroedsh</option>
+    <option value="C7">200.Drundemiso</option>
+    <option value="C8">201.Ityanianat</option>
+    <option value="C9">202.Purneyrine</option>
+    <option value="CA">203.Dokiessmat</option>
+    <option value="CB">204.Nupiacheh</option>
+    <option value="CC">205.Dihewsonj</option>
+    <option value="CD">206.Rudrailhik</option>
+    <option value="CE">207.Tweretnort</option>
+    <option value="CF">208.Snatreetze</option>
+    <option value="D0">209.Iwundaracos</option>
+    <option value="D1">210.Digarlewena</option>
+    <option value="D2">211.Erquagsta</option>
+    <option value="D3">212.Logovoloin</option>
+    <option value="D4">213.Boyaghosganh</option>
+    <option value="D5">214.Kuolungau</option>
+    <option value="D6">215.Pehneldept</option>
+    <option value="D7">216.Yevettiiqidcon</option>
+    <option value="D8">217.Sahliacabru</option>
+    <option value="D9">218.Noggalterpor</option>
+    <option value="DA">219.Chmageaki</option>
+    <option value="DB">220.Veticueca</option>
+    <option value="DC">221.Vittesbursul</option>
+    <option value="DD">222.Nootanore</option>
+    <option value="DE">223.Innebdjerah</option>
+    <option value="DF">224.Kisvarcini</option>
+    <option value="E0">225.Cuzcogipper</option>
+    <option value="E1">226.Pamanhermonsu</option>
+    <option value="E2">227.Brotoghek</option>
+    <option value="E3">228.Mibittara</option>
+    <option value="E4">229.Huruahili</option>
+    <option value="E5">230.Raldwicarn</option>
+    <option value="E6">231.Ezdartlic</option>
+    <option value="E7">232.Badesclema</option>
+    <option value="E8">233.Isenkeyan</option>
+    <option value="E9">234.Iadoitesu</option>
+    <option value="EA">235.Yagrovoisi</option>
+    <option value="EB">236.Ewcomechio</option>
+    <option value="EC">237.Inunnunnoda</option>
+    <option value="ED">238.Dischiutun</option>
+    <option value="EE">239.Yuwarugha</option>
+    <option value="EF">240.Ialmendra</option>
+    <option value="F0">241.Reponudrle</option>
+    <option value="F1">242.Rinjanagrbo</option>
+    <option value="F2">243.Zeziceloh</option>
+    <option value="F3">244.Oeileutasc</option>
+    <option value="F4">245.Zicniijinis</option>
+    <option value="F5">246.Dugnowarilda</option>
+    <option value="F6">247.Neuxoisan</option>
+    <option value="F7">248.Ilmenhorn</option>
+    <option value="F8">249.Rukwatsuku</option>
+    <option value="F9">250.Nepitzaspru</option>
+    <option value="FA">251.Chcehoemig</option>
+    <option value="FB">252.Haffneyrin</option>
+    <option value="FC">253.Uliciawai</option>
+    <option value="FD">254.Tuhgrespod</option>
+    <option value="FE">255.Iousongola</option>
+    <option value="FF">256.Odyalutai</option>
+  </select>
+  <label for="planet">Planet:</label>
+  <select id="planet" onchange="decodeUAwithPlanet()">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+  </select>
+</div>
+
+<div class="input_container">
+  <div>
+    <label for="GA">Galactic Address:</label>
+    <input type="text" id="GA" maxlength="19">
+  </div>
+  <div>
+    <label for="UA">Universal Address:</label>
+    <input type="text" id="UA" maxlength="16">
+  </div>
+
+  <div>
+    <label for="UA_decoded" style="vertical-align: middle;">Universal Address (Decoded):</label>
+    <textarea id="UA_decoded" rows="10" readonly style="vertical-align: middle;"></textarea>
+  </div>
+</div>
+
+<br>
+
+<div id="msg" class="msg">
+    Copied to clipboard!
+</div>
+
+<script>
+    var glyph = document.getElementById('glyph');
+    var UAInput = document.getElementById('UA');
+    var GAInput = document.getElementById('GA');
+    var UADecodedInput = document.getElementById('UA_decoded');
+    var galaxyInput = document.getElementById('galaxy');
+    var planetInput = document.getElementById('planet');
+
+    UAInput.addEventListener("input", function (e) {
+        getGlyphFromUA();
+    });
+
+    UAInput.addEventListener("keyup", ({key}) => {
+      if (key === "Enter") {
+        UAInput.value = ( "0000000000000000" + UAInput.value ).slice( -16 );
+        getGlyphFromUA();
+      }
+    })
+
+    GAInput.addEventListener("input", function (e) {
+        var GAInputCursorPos = GAInput.selectionStart;
+        getGlyphFromGA();
+        if ( GAInput.value.length > GAInputCursorPos + 1 ) {
+            GAInput.setSelectionRange(GAInputCursorPos,GAInputCursorPos);
+        }
+    });
+
+    function updateButtons() {
+      var e = document.getElementsByClassName('copybtn');
+
+      if ( UA.length == 12 ) {
+        for (var i = 0; i < e.length; i++) {
+          e[i].disabled = false;
+          e[i].classList.remove('disableBtn');
+        }
+      }
+
+      if ( UA.length > 0 ) {
+        deleteLastBtn.disabled = false;
+        if ( deleteLastBtn.classList.contains('disableBtn') ) deleteLastBtn.classList.remove('disableBtn');
+      } else {
+        deleteLastBtn.disabled = true;
+        if ( !deleteLastBtn.classList.contains('disableBtn') ) deleteLastBtn.classList.add('disableBtn');        
+      }
+
+      if ( UA.length < 12 ) {
+        for (var i = 0; i < e.length; i++) {
+          e[i].disabled = true;
+          e[i].classList.add('disableBtn');
+        }
+      }
+    }
+
+    var resizeableDiv = document.getElementById('resizeable');
+    var resizeHandle = document.getElementById('resize-handle');
+    var isResizing = false;
+    var startX;
+    var startY;
+    var startWidth;
+    var startHeight;
+
+    resizeHandle.addEventListener("mousedown", function (e) {
+      isResizing = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startWidth = parseInt(window.getComputedStyle(resizeableDiv).width);
+      startHeight = parseInt(window.getComputedStyle(resizeableDiv).height);
+    });
+
+    document.addEventListener("mousemove", function (e) {
+      if (!isResizing) return;
+
+//      var newWidth = startWidth + e.clientX - startX;
+      var newHeight = startHeight + e.clientY - startY;
+
+//    resizeableDiv.style.width = newWidth + "px";
+      resizeableDiv.style.height = newHeight + "px";
+    });
+
+    document.addEventListener("mouseup", function (e) {
+      isResizing = false;
+    });
+
+    document.addEventListener("scrollend", function (e) {
+      pointY = pointY - ( document.documentElement.scrollTop - lastScrollTop );
+    });
+
+    document.addEventListener("resize", function (e) {
+      pointY = pointY - ( document.documentElement.scrollTop - lastScrollTop );
+    });
+
+    var scale = 1,
+    panning = false,
+    pointX = 0,
+    pointY = 0,
+    start = { x: 0, y: 0 },
+    zoom = document.getElementById("zoom");
+
+    var lastScrollTop = 0;
+
+    var thumbnailsDiv = document.getElementById("thumbnails");
+
+    var fileInput = document.getElementById("fileInput");
+    
+    fileInput.addEventListener("change", function(e) {
+      var files = e.target.files;
+      showImages(files);
+      fileInput.value = "";
+    });
+
+    function showImages(files) {
+      thumbnailsDiv.innerHTML = "";
+
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+
+        if (file.type.match("image.*")) {
+          var imageURL = URL.createObjectURL(file);
+
+          var img = document.createElement("img");
+          img.src = imageURL;
+          img.classList.add("thumbnail");
+
+          img.addEventListener("click", function() {
+                if (event.ctrlKey) {
+                    if (confirm('Are you sure you want to delete this image?')) {
+                        event.currentTarget.remove();
+                    }
+                } else {
+                    showPreview(this.src);
+                }
+          });
+
+          thumbnailsDiv.appendChild(img);
+        }
+      }
+    }
+
+    function showPreview(imageURL) {
+      // Update the preview image
+      zoomImg.src = imageURL;
+      resizeableDiv.style.display = "block";
+  
+      lastScrollTop = document.documentElement.scrollTop;
+
+      // Restore zoom and position
+      scale = 1;
+      pointX = zoom.parentElement.offsetLeft;
+      pointY = zoom.parentElement.offsetTop - lastScrollTop; // document.documentElement.scrollTop;
+      start = { x: 0, y: 0 };
+      panning = false;
+      zoom.style.transform ="translate(0px, 0px) scale(1)";
+    }
+
+    function setTransform() {
+      zoom.style.transform = "translate(" + ( pointX - zoom.parentElement.offsetLeft ) + "px, " + ( pointY - zoom.parentElement.offsetTop + document.documentElement.scrollTop ) + "px) scale(" + scale + ")";
+      lastScrollTop = document.documentElement.scrollTop;
+    }
+    
+    zoom.onmousedown = function (e) {
+      e.preventDefault();
+      start = { x: e.clientX - pointX, y: e.clientY - pointY };
+      panning = true;
+    }
+    
+    zoom.onmouseup = function (e) {
+      panning = false;
+    }
+    
+    zoom.onmouseleave = function(e) {
+      panning = false;
+    }
+        
+    zoom.onmousemove = function (e) {
+      e.preventDefault();
+      if (!panning) {
+        return;
+      }
+      pointX = (e.clientX - start.x);
+      pointY = (e.clientY - start.y);
+      setTransform();
+    }
+    
+    zoom.onwheel = function (e) {
+      e.preventDefault();
+      var xs = (e.clientX - pointX) / scale,
+          ys = (e.clientY - pointY) / scale,
+          delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
+      (delta > 0) ? (scale *= 1.2) : (scale /= 1.2);
+      pointX = e.clientX - xs * scale;
+      pointY = e.clientY - ys * scale;    
+      setTransform();
+    }
+
+    function toHex2(v) {
+      return ("00"+v.toString(16)).slice(-2).toUpperCase();
+    }
+
+    function toHex3(v) {
+      return ("000"+v.toString(16)).slice(-3).toUpperCase();
+    }
+
+    function toHex4(v) {
+      return ("0000"+v.toString(16)).slice(-4).toUpperCase();
+    }
+
+    var UA = '';
+    
+    function concatID(id) {
+      if (UA.length < 12) {
+        UA += id;
+
+        GAInput.value = '';
+        UAInput.value = '';
+        UADecodedInput.value = '';
+      }
+      if ( UA.length == 12 ) decodeUA();
+      updateGlyphs();
+      updateButtons();
+    }
+    
+    function clean() {
+      UA = '';
+      glyph.innerHTML = '';
+      GAInput.value = "";
+      UAInput.value = '';
+      UADecodedInput.value = '';
+      updateButtons();
+    }
+    
+    function deleteLast() {
+      var gls = glyph.getElementsByClassName('glyph-container');
+
+      if ( gls && gls.length > 0 ) gls[ gls.length - 1 ].remove();
+
+      UA = UA.slice(0,-1);
+      GAInput.value = "";
+      UAInput.value = '';
+      UADecodedInput.value = '';
+      updateButtons();
+    }
+
+    function updateGlyphs() {
+      glyph.innerHTML = '';
+      for ( var i = 0; i < UA.length; i++ ) {
+//        glyph.innerHTML += '<img src="PORTALSYMBOL.'+UA.slice(i,i+1)+'.png">';
+        glyph.innerHTML +='<div class="glyph-container"><img src="PORTALSYMBOL.'+UA[i]+'.png" class="image"><div class="image_num">'+UA[i]+'</div></div>';
+      }
+    }
+
+    function getGlyphFromUA() {
+      // [??][P][SSS][GG][YY][ZZZ][XXX]
+      // (? = Unknown
+      // P = Planet Index
+      // S = Star System Index
+      // G = Galaxy
+      // Y = Height
+      // Z = Width
+      // X = Length
+
+      // [P][SSS][YY][ZZZ][XXX]
+
+      var v = UAInput.value.toUpperCase();
+
+      v = v.replace( /[^0-9A-F]/g, '');
+
+      if ( v.length >= 1 && v[0] != '0' ) v = '0' + v;
+      if ( v.length == 2 && v[1] != '0' ) v = '0' + v;
+
+      UAInput.value = v;
+
+      var l = v.length;
+
+      if ( l == 16 ) {
+          var galaxy = parseInt(v.slice(6,8),16);
+          var xxx = parseInt(v.slice(13),16);
+          var yy = parseInt(v.slice(8,10),16);
+          var zzz = parseInt(v.slice(10,13),16);
+          var solaridx = parseInt(v.slice(3,6),16);
+          var planetidx = parseInt(v.slice(2,3),16);
+
+          galaxyInput.options.selectedIndex = galaxy;
+
+          UA = planetidx.toString() + toHex3( solaridx ) + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ) ;
+
+          updateGlyphs();
+          decodeUA();
+      } else {
+          UA = '';
+          glyph.innerHTML = '';
+          GAInput.value = "";
+          UADecodedInput.value = '';
+      }
+      updateButtons();
+    }
+
+    function getGlyphFromGA() {
+      // [XXXX]:[YYYY]:[ZZZZ]:[SSSS]
+      // X = Length - 0x801 & 0xfff
+      // Y = Height - 0x81 & 0xff
+      // Z = Width  - 0x801 & 0xfff
+      // S = Star System Index
+
+      // [??][P][SSS][GG][YY][ZZZ][XXX]
+      // (? = Unknown
+      // P = Planet Index
+      // S = Star System Index
+      // G = Galaxy
+      // Y = Height
+      // Z = Width
+      // X = Length
+
+      // [P][SSS][YY][ZZZ][XXX]
+
+      var v = GAInput.value.toUpperCase();
+
+      v = v.replace( /[^0-9A-F]/g, '');
+
+      if ( v.length > 4 && v[4] != ':' ) v = v.slice(0,4) + ":" + v.slice(4);
+      if ( v.length > 9 && v[9] != ':' ) v = v.slice(0,9) + ":" + v.slice(9);
+      if ( v.length > 14 && v[14] != ':' ) v = v.slice(0,14) + ":" + v.slice(14);
+
+      GAInput.value = v;
+
+      var l = v.length;
+
+      if ( l == 19 ) {
+          var galaxy = parseInt( galaxyInput.value, 16 );
+          var xxx = ( parseInt(v.slice(0,4),16) + 0x801 ) & 0xfff;
+          var yy =  ( parseInt(v.slice(5,9),16) + 0x81 ) & 0xff;
+          var zzz = ( parseInt(v.slice(10,14),16) + 0x801 ) & 0xfff;
+          var solaridx = parseInt(v.slice(16),16);
+          var planetidx = planetInput.value;
+
+          galaxyInput.options.selectedIndex = galaxy;
+
+          UA = planetidx.toString() + toHex3( solaridx ) + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ) ;
+
+          updateGlyphs();
+          decodeUA();
+      } else {
+          UA = '';
+          glyph.innerHTML = '';
+          UAInput.value = "";
+          UADecodedInput.value = '';
+      }
+      updateButtons();
+    }
+
+    function decodeUAwithPlanet() {
+        if ( UA.length < 12 ) return;
+        UA = planetInput.value.toString() + UA.slice(1);
+        updateGlyphs();
+        decodeUA();
+    }
+
+    function decodeUA() {
+      if ( UA.length != 12 ) {
+        return;
+      }
+      var galaxy = galaxyInput.value;
+      UAInput.value = '00' + UA.slice(0, 4) + galaxy + UA.slice(4);
+      
+      var xxx = parseInt(UA.slice(9),16);
+      var yy = parseInt(UA.slice(4,6),16);
+      var zzz = parseInt(UA.slice(6,9),16);
+      var solaridx = parseInt(UA.slice(1,4),16);
+      var planetidx = parseInt(UA.slice(0,1),16);
+      
+      var x = ( xxx & 0x800 ? -1 ^ 0xfff | xxx : xxx );
+      var y = ( yy & 0x80 ? -1 ^ 0xff | yy : yy );
+      var z = ( zzz & 0x800 ? -1 ^ 0xfff | zzz : zzz );
+
+      UADecodedInput.value = `{
+  "RealityIndex":`+parseInt(galaxy,16)+`,
+  "GalacticAddress":{
+    "VoxelX":`+x+`,
+    "VoxelY":`+y+`,
+    "VoxelZ":`+z+`,
+    "SolarSystemIndex":`+solaridx+`,
+    "PlanetIndex":`+planetidx+`
+  }
+}`;
+
+      planetInput.options.selectedIndex = planetidx;
+
+      var GA = ( toHex4( ( xxx - 0x801 ) & 0xfff ) ) + ':' + ( toHex4( ( yy - 0x81 ) & 0xff ) ) + ':' + ( toHex4( ( zzz - 0x801 ) & 0xfff ) ) + ':' + toHex4( solaridx );
+
+      GAInput.value = GA;
+
+      updateButtons();
+    }
+    
+    function copyUA() {
+      var v = "0x"+UAInput.value;
+      navigator.clipboard.writeText(v)
+      .then(function() {
+          showMessage();
+      })
+      .catch(function() {
+          alert('Error copying UA to clipboard.');
+      });
+    }
+    
+    function copyGA() {
+      var v = GAInput.value;
+      navigator.clipboard.writeText(v)
+      .then(function() {
+          showMessage();
+      })
+      .catch(function() {
+          alert('Error copying GA to clipboard.');
+      });
+    }
+
+    function copyUADecoded() {
+      var v = UADecodedInput.value;
+      navigator.clipboard.writeText(v)
+      .then(function() {
+          showMessage();
+      })
+      .catch(function() {
+          alert('Error copying UA (Decoded) to clipboard.');
+      });
+    }
+</script>
+</body>
+</html>
