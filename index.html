@@ -19,202 +19,172 @@
       height: 100%;
       overflow: hidden;
       overflow-y: auto;
-  }
+      font-family: Arial;
+    }
 
-  a:visited {
-    color: white;
-  }
+    a:visited {
+      color: white;
+    }
 
-  h1 {
+    h1 {
       margin-bottom: 20px;
-  }
+    }
 
-  .container {
+    .container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       margin-bottom: 20px;
-  }
+    }
 
-  .glyph-container {
-    margin: 5px;
-    border: 1px solid #ccc;
-    width: 45px;
-    text-align: center;
-  }
+    .glyph-container {
+      margin: 5px;
+      border: 1px solid #ccc;
+      width: 45px;
+      text-align: center;
+    }
 
-  .image {
-    margin: 0px;
-    border-bottom: 1px solid #ccc;
-    width: 45px;
-  }
+    .image {
+      margin: 0px;
+      border-bottom: 1px solid #ccc;
+      width: 45px;
+    }
 
-  .image_num {
-    margin: 0px;
-    text-align: center;
-    width: 45px;
-    font-size: 12px;
-  }
+    .image_num {
+      margin: -2px 0px 1px 0px;
+      text-align: center;
+      width: 45px;
+      font-size: 12px;
+    }
 
-  #UA, #GA, #UAS {
-    background-color: white;
-    color: black;
-    padding: 10px;
-    text-align: center;
-    font-size: 16px;
-    border: none;
-    margin-bottom: 10px;
-  }
+    #UA, #GA, #UAS {
+      background-color: white;
+      color: black;
+      padding: 10px;
+      text-align: center;
+      font-size: 16px;
+      border: none;
+      margin-bottom: 10px;
+    }
 
-  #glyph {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 20px;
-    height: 60px;
-    width: 400px;
-    background-color: #282828;
-    -webkit-border-radius:5px;
-  }
+    #galaxy, #planet {
+      background-color: white;
+      color: black;
+      padding: 5px;
+      text-align: left;
+      font-size: 14px;
+      border: none;
+      margin-bottom: 20px;
+      -webkit-border-radius:3px;
+    }
 
-  #glyph .glyph-container {
-    margin: 5px 0px 5px 0px;
-    width: 30px;
-    border: 1px solid #ccc;
-    text-align: center;
-  }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      -webkit-border-radius:5px;
+    }
 
-  #glyph .image {
-    border: 0px;
-    width: 30px;
-  }
+    .disableBtn {
+        background-color: red;
+    }
 
-  #glyph .image_num {
-    text-align: center;
-    border-top: 1px solid #ccc;
-    width: 30px;
-    height: 10px;
-    font-size: 12px;
-  }
+    .button-container {
+        display: flex;
+        gap: 10px;
+    }
 
-  #galaxy, #planet {
-    background-color: white;
-    color: black;
-    padding: 5px;
-    text-align: left;
-    font-size: 14px;
-    border: none;
-    margin-bottom: 20px;
-    -webkit-border-radius:3px;
-  }
+    textarea {
+      resize: none;
+      width: 400px;
+    }
 
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    -webkit-border-radius:5px;
-  }
+    .msg {
+      position: fixed;
+      display: none;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: black;
+      background-color: #ffff00;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
 
-  .disableBtn {
-      background-color: red;
-  }
+    .zoom_outer {
+      width: 100%;
+      height: 100px;
+      overflow: hidden;
+    }
+    
+    #zoom {
+      width: 100%;
+      height: 100%;
+      transform-origin: 0px 0px;
+      transform: scale(1) translate(0px, 0px);
+      cursor: grab;
+    }
+    
+    div#zoom > img {
+      width: 100%;
+      height: auto;
+    }
+    
+    .thumbnail {
+      max-width: 100px;
+      max-height: 100px;
+      cursor: pointer;
+    }
+    
+    p#text{
+      text-align: center;
+      padding: 0px;
+      margin: 0px;
+    }
 
-  .button-container {
-      display: flex;
-      gap: 10px;
-  }
+    div#div_file{
+      position:relative;
+      padding: 10px 20px;
+      height: 16px;
+      margin: 10px;
+      background-color: #2499e3;
+      -webkit-border-radius:5px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
 
-  textarea {
-    resize: none;
-    width: 400px;
-  }
+    input#fileInput{
+      position:absolute;
+      top:0px;
+      left:0px;
+      right:0px;
+      bottom:0px;
+      width:100%;
+      height:100%;
+      opacity: 0;
+    }
 
-  .msg {
-    position: fixed;
-    display: none;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
-    background-color: #ffff00;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
+    .input_container label{
+      display: inline-block;
+      width: 200px;
+      text-align: right;
+    }
 
-  .zoom_outer {
-    width: 100%;
-    height: 100px;
-    overflow: hidden;
-  }
-  
-  #zoom {
-    width: 100%;
-    height: 100%;
-    transform-origin: 0px 0px;
-    transform: scale(1) translate(0px, 0px);
-    cursor: grab;
-  }
-  
-  div#zoom > img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .thumbnail {
-    max-width: 100px;
-    max-height: 100px;
-    cursor: pointer;
-  }
-  
-  p#text{
-    text-align: center;
-    padding: 0px;
-    margin: 0px;
-  }
+    input, textarea {
+      -webkit-border-radius:5px;    
+    }
 
-  div#div_file{
-    position:relative;
-    padding: 10px 20px;
-    height: 16px;
-    margin: 10px;
-    background-color: #2499e3;
-    -webkit-border-radius:5px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-
-  input#fileInput{
-    position:absolute;
-    top:0px;
-    left:0px;
-    right:0px;
-    bottom:0px;
-    width:100%;
-    height:100%;
-    opacity: 0;
-  }
-
-  .input_container label{
-    display: inline-block;
-    width: 200px;
-    text-align: right;
-  }
-
-  input, textarea {
-    -webkit-border-radius:5px;    
-  }
-
-  .hover {
-    background-color: lightgray;
-  }
-</style>
+    .hover {
+      background-color: lightgray;
+    }
+  </style>
 </head>
 <body>
   <h1>NMS Address Translator</h1>
@@ -249,9 +219,7 @@
     <div onclick="concatID('F')" class="glyph-container"><img src="PORTALSYMBOL.F.png" class="image"><div class="image_num">F</div></div>
 </div>
 
-<div id="glyph">
-  <div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>
-</div>
+<canvas id="glyphs_img" width="400" height="70" crossorigin="anonymous"></canvas>
 
 <br>
 
@@ -579,6 +547,8 @@
       }, 3000); // Hide msg after 3 seconds (3000 ms)
     }
 
+    var context;
+
     var resizeableDiv = document.getElementById('resizeable');
     var resizeHandle = document.getElementById('resize-handle');
     var isResizing = false;
@@ -718,6 +688,7 @@
       setTransform();
     }
 
+    // Onload
     document.addEventListener('DOMContentLoaded', function() {
       document.addEventListener('dragover', handleDragOver, false);
       document.addEventListener('dragleave', handleDragLeave, false);
@@ -743,6 +714,66 @@
         document.body.classList.remove('hover');
         showImages(event.dataTransfer.files);
       }
+
+      // Load images
+
+      const images = [
+        'PORTALSYMBOL.0.png',
+        'PORTALSYMBOL.1.png',
+        'PORTALSYMBOL.2.png',
+        'PORTALSYMBOL.3.png',
+        'PORTALSYMBOL.4.png',
+        'PORTALSYMBOL.5.png',
+        'PORTALSYMBOL.6.png',
+        'PORTALSYMBOL.7.png',
+        'PORTALSYMBOL.8.png',
+        'PORTALSYMBOL.9.png',
+        'PORTALSYMBOL.A.png',
+        'PORTALSYMBOL.B.png',
+        'PORTALSYMBOL.C.png',
+        'PORTALSYMBOL.D.png',
+        'PORTALSYMBOL.E.png',
+        'PORTALSYMBOL.F.png'
+      ];
+
+      const canvas = document.getElementById('glyphs_img');
+      context = canvas.getContext('2d');
+
+      const p = images.map((url) => {
+        return new Promise((resolve, reject) => {
+          const imagen = new Image();
+          imagen.onload = () => resolve(imagen);
+          imagen.onerror = () => reject(new Error(`Error loading imagen ${url}`));
+          imagen.src = url;
+        });
+      });
+
+      Promise.all(p)
+        .then((loadedImages) => {
+          // all images loaded
+          glyphs = loadedImages;
+
+          // Create a URL object
+          var url = new URL(window.location.href);
+
+          // Get the search parameters from the URL
+          var searchParams = url.searchParams;
+
+          // Get the value of UA
+          var paramUA = searchParams.get('UA');
+          if ( paramUA ) {
+            paramUA = paramUA.toUpperCase().replace( /[^0-9A-F]/g, '');
+            if ( paramUA.length == 16 ) {
+              decodeUA(paramUA);
+            }
+          }
+          updateGlyphs();
+        })
+        .catch((error) => {
+          // fail to load all images
+          console.error('Error to load ', error);
+        });
+
     });
 
     function toHex1(v) {
@@ -764,7 +795,6 @@
 
     var UAS = '';
 
-    var glyph = document.getElementById('glyph');
     var UAInput = document.getElementById('UA');
     var GAInput = document.getElementById('GA');
     var UASInput = document.getElementById('UAS');
@@ -822,22 +852,6 @@
       }
     }
 
-    // Create a URL object
-    var url = new URL(window.location.href);
-
-    // Get the search parameters from the URL
-    var searchParams = url.searchParams;
-
-    // Get the value of UA
-    var paramUA = searchParams.get('UA');
-
-    if ( paramUA ) {
-      paramUA = paramUA.toUpperCase().replace( /[^0-9A-F]/g, '');
-      if ( paramUA.length == 16 ) {
-        decodeUA(paramUA);
-      }
-    }
-
     function concatID(id) {
       if (UAS.length < 12) {
         UAS += id;
@@ -854,35 +868,78 @@
     
     function clean() {
       UAS = '';
-      glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
       GAInput.value = '';
       UAInput.value = '';
       UASInput.value = '';
       UADecodedInput.value = '';
+      updateGlyphs();
       updateButtons();
     }
     
     function deleteLast() {
-      var gls = glyph.getElementsByClassName('glyph-container');
-
-      if ( gls && gls.length > 0 ) gls[ gls.length - 1 ].remove();
-
       UAS = UAS.slice(0,-1);
       GAInput.value = '';
       UAInput.value = '';
       UASInput.value = '';
       UADecodedInput.value = '';
+      updateGlyphs();
       updateButtons();
-
-      if ( glyph.innerHTML == '' ) glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
     }
 
     function updateGlyphs() {
-      glyph.innerHTML = '';
-      for ( var i = 0; i < UAS.length; i++ ) {
-        glyph.innerHTML +='<div class="glyph-container"><img src="PORTALSYMBOL.'+UAS[i]+'.png" class="image"><div class="image_num">'+UAS[i]+'</div></div>';
+      const x = 0;
+      const y = 0;
+      const width = 400;
+      const height = 70;
+      const cornerRadius = 5;
+
+      context.strokeStyle = '#282828';
+      context.beginPath();
+      context.moveTo(x + cornerRadius, y);
+      context.arcTo(x + width, y, x + width, y + height, cornerRadius);
+      context.arcTo(x + width, y + height, x, y + height, cornerRadius);
+      context.arcTo(x, y + height, x, y, cornerRadius);
+      context.arcTo(x, y, x + width, y, cornerRadius);
+      context.closePath();
+
+      context.fillStyle = '#282828';
+      context.fill();
+
+      for ( var n = 0; n < UAS.length; n++ ) {
+        var i = parseInt(UAS[n],16);
+        var xo = 8 + n * 32;
+
+        context.drawImage( glyphs[ i ], xo + 1, 8, 30, 30 );
+        
+        context.font = '12px Arial';
+        context.fillStyle = 'white';
+        context.textAlign = 'center';
+        context.fillText(i.toString(16).toUpperCase(), xo + 16, 50);
+
+        context.lineWidth = 1;
+        context.strokeStyle = '#ccc';
+        context.strokeRect(xo, 6, 32, 48);
+
+        context.beginPath();
+        context.moveTo(xo, 38);
+        context.lineTo(xo + 32, 38);
+        context.strokeStyle = '#ccc';
+        context.stroke();
       }
-      if ( glyph.innerHTML == '' ) glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
+
+      if ( UAS.length == 0 ) {
+        context.font = '16px Arial';
+        context.fillStyle = '#bbb';
+        context.textAlign = 'center';
+        context.fillText('click the glyphs to select', 200, 40);
+      }
+
+      if ( UAS.length == 12 ) {
+        context.font = '12px Arial';
+        context.fillStyle = '#bbb';
+        context.textAlign = 'right';
+        context.fillText(galaxyInput.options[galaxyInput.selectedIndex].text, 400 - 8, 66);
+      }
     }
 
     function handleUAInput() {
@@ -899,10 +956,10 @@
         decodeUA(UAInput.value);
       } else {
           UAS = '';
-          glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UASInput.value = "";
           GAInput.value = '';
           UADecodedInput.value = '';
+          updateGlyphs();
           updateButtons();
       }
     }
@@ -924,10 +981,10 @@
 
           decodeUA('00' + toHex1(planetidx) + toHex3( solaridx ) + galaxy + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ));
       } else {
-          glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UAInput.value = "";
           GAInput.value = '';
           UADecodedInput.value = '';
+          updateGlyphs();
           updateButtons();
       }
       return uas;
@@ -955,10 +1012,10 @@
           decodeUA('00' + toHex1(planetidx) + toHex3( solaridx ) + galaxy + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ));
       } else {
           UAS = '';
-          glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UASInput.value = "";
           UAInput.value = "";
           UADecodedInput.value = '';
+          updateGlyphs();
           updateButtons();
       }
     }
