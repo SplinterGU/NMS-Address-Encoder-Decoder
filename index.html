@@ -261,8 +261,9 @@
 </div>
 <br>
 <div class="button-container">
-    <button id="copiarBtn" onclick="copyUA()" disabled class="copybtn disableBtn">Copy UA</button>
     <button id="copiarBtn2" onclick="copyGA()" disabled class="copybtn disableBtn">Copy GA</button>
+    <button id="copiarBtn" onclick="copyUA()" disabled class="copybtn disableBtn">Copy UA</button>
+    <button id="copiarBtn" onclick="copyUAS()" disabled class="copybtn disableBtn">Copy UA (short)</button>
     <button id="copiarBtn3" onclick="copyUADecoded()" disabled class="copybtn disableBtn">Copy UA (Decoded)</button>
 </div>
 
@@ -824,6 +825,7 @@
 
         GAInput.value = '';
         UAInput.value = '';
+        UASInput.value = '';
         UADecodedInput.value = '';
       }
       if ( UA.length == 12 ) decodeUA();
@@ -834,8 +836,9 @@
     function clean() {
       UA = '';
       glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
-      GAInput.value = "";
+      GAInput.value = '';
       UAInput.value = '';
+      UASInput.value = '';
       UADecodedInput.value = '';
       updateButtons();
     }
@@ -846,8 +849,9 @@
       if ( gls && gls.length > 0 ) gls[ gls.length - 1 ].remove();
 
       UA = UA.slice(0,-1);
-      GAInput.value = "";
+      GAInput.value = '';
       UAInput.value = '';
+      UASInput.value = '';
       UADecodedInput.value = '';
       updateButtons();
 
@@ -904,7 +908,7 @@
           UA = '';
           glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UASInput.value = "";
-          GAInput.value = "";
+          GAInput.value = '';
           UADecodedInput.value = '';
       }
       updateButtons();
@@ -994,7 +998,7 @@
           UA = '';
           glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UAInput.value = "";
-          GAInput.value = "";
+          GAInput.value = '';
           UADecodedInput.value = '';
       }
       updateButtons();
@@ -1047,13 +1051,24 @@
     }
     
     function copyUA() {
-      var v = "0x"+UAInput.value;
+      var v = UAInput.value;
       navigator.clipboard.writeText(v)
       .then(function() {
           showMessage();
       })
       .catch(function() {
           alert('Error copying UA to clipboard.');
+      });
+    }
+    
+    function copyUAS() {
+      var v = UASInput.value;
+      navigator.clipboard.writeText(v)
+      .then(function() {
+          showMessage();
+      })
+      .catch(function() {
+          alert('Error copying UA (short) to clipboard.');
       });
     }
     
