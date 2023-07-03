@@ -250,6 +250,7 @@
 </div>
 
 <div id="glyph">
+  <div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>
 </div>
 
 <br>
@@ -542,11 +543,11 @@
 <div class="input_container">
   <div>
     <label for="GA">Galactic Address:</label>
-    <input type="text" id="GA" maxlength="19">
+    <input type="text" id="GA" maxlength="19" placeholder="or type GA here">
   </div>
   <div>
     <label for="UA">Universal Address:</label>
-    <input type="text" id="UA" maxlength="16">
+    <input type="text" id="UA" maxlength="16" placeholder="or type UA here">
   </div>
 
   <div>
@@ -824,7 +825,7 @@
     
     function clean() {
       UA = '';
-      glyph.innerHTML = '';
+      glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
       GAInput.value = "";
       UAInput.value = '';
       UADecodedInput.value = '';
@@ -841,6 +842,8 @@
       UAInput.value = '';
       UADecodedInput.value = '';
       updateButtons();
+
+      if ( glyph.innerHTML == '' ) glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
     }
 
     function updateGlyphs() {
@@ -849,6 +852,7 @@
 //        glyph.innerHTML += '<img src="PORTALSYMBOL.'+UA.slice(i,i+1)+'.png">';
         glyph.innerHTML +='<div class="glyph-container"><img src="PORTALSYMBOL.'+UA[i]+'.png" class="image"><div class="image_num">'+UA[i]+'</div></div>';
       }
+      if ( glyph.innerHTML == '' ) glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
     }
 
     function getGlyphFromUA() {
@@ -890,7 +894,7 @@
           decodeUA();
       } else {
           UA = '';
-          glyph.innerHTML = '';
+          glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           GAInput.value = "";
           UADecodedInput.value = '';
       }
@@ -943,7 +947,7 @@
           decodeUA();
       } else {
           UA = '';
-          glyph.innerHTML = '';
+          glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UAInput.value = "";
           UADecodedInput.value = '';
       }
