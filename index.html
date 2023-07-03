@@ -261,17 +261,18 @@
 </div>
 <br>
 <div class="button-container">
-    <button id="copiarBtn2" onclick="copyGA()" disabled class="copybtn disableBtn">Copy GA</button>
-    <button id="copiarBtn" onclick="copyUA()" disabled class="copybtn disableBtn">Copy UA</button>
-    <button id="copiarBtn" onclick="copyUAS()" disabled class="copybtn disableBtn">Copy UA (short)</button>
-    <button id="copiarBtn3" onclick="copyUADecoded()" disabled class="copybtn disableBtn">Copy UA (Decoded)</button>
+    <button onclick="copyGA()" disabled class="copybtn disableBtn">Copy GA</button>
+    <button onclick="copyUA()" disabled class="copybtn disableBtn">Copy UA</button>
+    <button onclick="copyUAS()" disabled class="copybtn disableBtn">Copy UA (short)</button>
+    <button onclick="copyUADecoded()" disabled class="copybtn disableBtn">Copy UA (Decoded)</button>
+    <button onclick="copyLink()" disabled class="copybtn disableBtn">Copy Share Link</button>
 </div>
 
 <br>
 
 <div>
   <label for="galaxy">Galaxy:</label>
-  <select id="galaxy" onchange="decodeUA()">
+  <select id="galaxy" onchange="encodeUA()">
     <option value="00">1.Euclid</option>
     <option value="01">2.Hilbert Dimension</option>
     <option value="02">3.Calypso</option>
@@ -530,7 +531,7 @@
     <option value="FF">256.Odyalutai</option>
   </select>
   <label for="planet">Planet:</label>
-  <select id="planet" onchange="decodeUAwithPlanet()">
+  <select id="planet" onchange="encodeUA()">
     <option value="0">0</option>
     <option value="1">1</option>
     <option value="2">2</option>
@@ -578,90 +579,6 @@
       }, 3000); // Hide msg after 3 seconds (3000 ms)
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-      document.addEventListener('dragover', handleDragOver, false);
-      document.addEventListener('dragleave', handleDragLeave, false);
-      document.addEventListener('drop', handleDrop, false);
-      document.addEventListener('dragstart', handleDragStart, false);
-
-      function handleDragStart(event) {
-        event.preventDefault();
-      }
-
-      function handleDragOver(event) {
-        event.preventDefault();
-        document.body.classList.add('hover');
-      }
-
-      function handleDragLeave(event) {
-        event.preventDefault();
-        document.body.classList.remove('hover');
-      }
-
-      function handleDrop(event) {
-        event.preventDefault();
-        document.body.classList.remove('hover');
-        showImages(event.dataTransfer.files);
-      }
-    });
-
-    var glyph = document.getElementById('glyph');
-    var UAInput = document.getElementById('UA');
-    var GAInput = document.getElementById('GA');
-    var UASInput = document.getElementById('UAS');
-    var UADecodedInput = document.getElementById('UA_decoded');
-    var galaxyInput = document.getElementById('galaxy');
-    var planetInput = document.getElementById('planet');
-
-    UAInput.addEventListener("input", function (e) {
-        getGlyphFromUA();
-    });
-
-    UAInput.addEventListener("keyup", ({key}) => {
-      if (key === "Enter") {
-        UAInput.value = ( "0000000000000000" + UAInput.value ).slice( -16 );
-        getGlyphFromUA();
-      }
-    })
-
-    UASInput.addEventListener("input", function (e) {
-        getGlyphFromUAS();
-    });
-
-    GAInput.addEventListener("input", function (e) {
-        var GAInputCursorPos = GAInput.selectionStart;
-        getGlyphFromGA();
-        if ( GAInput.value.length > GAInputCursorPos + 1 ) {
-            GAInput.setSelectionRange(GAInputCursorPos,GAInputCursorPos);
-        }
-    });
-
-    function updateButtons() {
-      var e = document.getElementsByClassName('copybtn');
-
-      if ( UA.length == 12 ) {
-        for (var i = 0; i < e.length; i++) {
-          e[i].disabled = false;
-          e[i].classList.remove('disableBtn');
-        }
-      }
-
-      if ( UA.length > 0 ) {
-        deleteLastBtn.disabled = false;
-        if ( deleteLastBtn.classList.contains('disableBtn') ) deleteLastBtn.classList.remove('disableBtn');
-      } else {
-        deleteLastBtn.disabled = true;
-        if ( !deleteLastBtn.classList.contains('disableBtn') ) deleteLastBtn.classList.add('disableBtn');        
-      }
-
-      if ( UA.length < 12 ) {
-        for (var i = 0; i < e.length; i++) {
-          e[i].disabled = true;
-          e[i].classList.add('disableBtn');
-        }
-      }
-    }
-
     var resizeableDiv = document.getElementById('resizeable');
     var resizeHandle = document.getElementById('resize-handle');
     var isResizing = false;
@@ -680,11 +597,7 @@
 
     document.addEventListener("mousemove", function (e) {
       if (!isResizing) return;
-
-//      var newWidth = startWidth + e.clientX - startX;
       var newHeight = startHeight + e.clientY - startY;
-
-//    resizeableDiv.style.width = newWidth + "px";
       resizeableDiv.style.height = newHeight + "px";
     });
 
@@ -805,6 +718,37 @@
       setTransform();
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('dragover', handleDragOver, false);
+      document.addEventListener('dragleave', handleDragLeave, false);
+      document.addEventListener('drop', handleDrop, false);
+      document.addEventListener('dragstart', handleDragStart, false);
+  
+      function handleDragStart(event) {
+        event.preventDefault();
+      }
+  
+      function handleDragOver(event) {
+        event.preventDefault();
+        document.body.classList.add('hover');
+      }
+  
+      function handleDragLeave(event) {
+        event.preventDefault();
+        document.body.classList.remove('hover');
+      }
+  
+      function handleDrop(event) {
+        event.preventDefault();
+        document.body.classList.remove('hover');
+        showImages(event.dataTransfer.files);
+      }
+    });
+
+    function toHex1(v) {
+      return ("0"+v.toString(16)).slice(-1).toUpperCase();
+    }
+
     function toHex2(v) {
       return ("00"+v.toString(16)).slice(-2).toUpperCase();
     }
@@ -817,24 +761,99 @@
       return ("0000"+v.toString(16)).slice(-4).toUpperCase();
     }
 
-    var UA = '';
-    
+
+    var UAS = '';
+
+    var glyph = document.getElementById('glyph');
+    var UAInput = document.getElementById('UA');
+    var GAInput = document.getElementById('GA');
+    var UASInput = document.getElementById('UAS');
+    var UADecodedInput = document.getElementById('UA_decoded');
+    var galaxyInput = document.getElementById('galaxy');
+    var planetInput = document.getElementById('planet');
+
+    UAInput.addEventListener("input", function (e) {
+      handleUAInput();
+    });
+
+    UAInput.addEventListener("keyup", ({key}) => {
+      if (key === "Enter") {
+        UAInput.value = ( "0000000000000000" + UAInput.value ).slice( -16 );
+        handleUAInput();
+      }
+    })
+
+    UASInput.addEventListener("input", function (e) {
+      UAS = '';
+      UASInput.value = handleUASInput(UASInput.value);
+    });
+
+    GAInput.addEventListener("input", function (e) {
+        var GAInputCursorPos = GAInput.selectionStart;
+        handleGAInput();
+        if ( GAInput.value.length > GAInputCursorPos + 1 ) {
+            GAInput.setSelectionRange(GAInputCursorPos,GAInputCursorPos);
+        }
+    });
+
+    function updateButtons() {
+      var e = document.getElementsByClassName('copybtn');
+
+      if ( UAInput.value.length == 16 ) {
+        for (var i = 0; i < e.length; i++) {
+          e[i].disabled = false;
+          e[i].classList.remove('disableBtn');
+        }
+      }
+
+      if ( UAS.length > 0 ) {
+        deleteLastBtn.disabled = false;
+        if ( deleteLastBtn.classList.contains('disableBtn') ) deleteLastBtn.classList.remove('disableBtn');
+      } else {
+        deleteLastBtn.disabled = true;
+        if ( !deleteLastBtn.classList.contains('disableBtn') ) deleteLastBtn.classList.add('disableBtn');        
+      }
+
+      if ( UAInput.value.length < 16 ) {
+        for (var i = 0; i < e.length; i++) {
+          e[i].disabled = true;
+          e[i].classList.add('disableBtn');
+        }
+      }
+    }
+
+    // Create a URL object
+    var url = new URL(window.location.href);
+
+    // Get the search parameters from the URL
+    var searchParams = url.searchParams;
+
+    // Get the value of UA
+    var paramUA = searchParams.get('UA');
+
+    if ( paramUA ) {
+      paramUA = paramUA.toUpperCase().replace( /[^0-9A-F]/g, '');
+      if ( paramUA.length == 16 ) {
+        decodeUA(paramUA);
+      }
+    }
+
     function concatID(id) {
-      if (UA.length < 12) {
-        UA += id;
+      if (UAS.length < 12) {
+        UAS += id;
 
         GAInput.value = '';
         UAInput.value = '';
         UASInput.value = '';
         UADecodedInput.value = '';
       }
-      if ( UA.length == 12 ) decodeUA();
+      if ( UAS.length == 12 ) UAS = handleUASInput(UAS);
       updateGlyphs();
       updateButtons();
     }
     
     function clean() {
-      UA = '';
+      UAS = '';
       glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
       GAInput.value = '';
       UAInput.value = '';
@@ -848,7 +867,7 @@
 
       if ( gls && gls.length > 0 ) gls[ gls.length - 1 ].remove();
 
-      UA = UA.slice(0,-1);
+      UAS = UAS.slice(0,-1);
       GAInput.value = '';
       UAInput.value = '';
       UASInput.value = '';
@@ -860,78 +879,61 @@
 
     function updateGlyphs() {
       glyph.innerHTML = '';
-      for ( var i = 0; i < UA.length; i++ ) {
-//        glyph.innerHTML += '<img src="PORTALSYMBOL.'+UA.slice(i,i+1)+'.png">';
-        glyph.innerHTML +='<div class="glyph-container"><img src="PORTALSYMBOL.'+UA[i]+'.png" class="image"><div class="image_num">'+UA[i]+'</div></div>';
+      for ( var i = 0; i < UAS.length; i++ ) {
+        glyph.innerHTML +='<div class="glyph-container"><img src="PORTALSYMBOL.'+UAS[i]+'.png" class="image"><div class="image_num">'+UAS[i]+'</div></div>';
       }
       if ( glyph.innerHTML == '' ) glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
     }
 
-    function getGlyphFromUA() {
-      // [??][P][SSS][GG][YY][ZZZ][XXX]
-      // ?? = Unknown
-      // P = Planet Index
-      // S = Star System Index
-      // G = Galaxy
-      // Y = Height
-      // Z = Width
-      // X = Length
-
-      // [P][SSS][YY][ZZZ][XXX]
-
+    function handleUAInput() {
       var v = UAInput.value.toUpperCase();
 
       v = v.replace( /[^0-9A-F]/g, '');
 
       if ( v.length >= 1 && v[0] != '0' ) v = '0' + v;
-      if ( v.length == 2 && v[1] != '0' ) v = '0' + v;
+      if ( v.length >= 2 && v[1] != '0' ) v = '0' + v;
 
       UAInput.value = v;
 
-      var l = v.length;
-
-      if ( l == 16 ) {
-          var galaxy = parseInt(v.slice(6,8),16);
-          var xxx = parseInt(v.slice(13),16);
-          var yy = parseInt(v.slice(8,10),16);
-          var zzz = parseInt(v.slice(10,13),16);
-          var solaridx = parseInt(v.slice(3,6),16);
-          var planetidx = parseInt(v.slice(2,3),16);
-
-          galaxyInput.options.selectedIndex = galaxy;
-
-          UA = planetidx.toString() + toHex3( solaridx ) + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ) ;
-
-          updateGlyphs();
-          decodeUA();
+      if ( v.length == 16 ) {
+        decodeUA(UAInput.value);
       } else {
-          UA = '';
+          UAS = '';
           glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UASInput.value = "";
           GAInput.value = '';
           UADecodedInput.value = '';
+          updateButtons();
       }
-      updateButtons();
     }
 
-    function getGlyphFromGA() {
-      // [XXXX]:[YYYY]:[ZZZZ]:[SSSS]
-      // X = Length - 0x801 & 0xfff
-      // Y = Height - 0x81 & 0xff
-      // Z = Width  - 0x801 & 0xfff
-      // S = Star System Index
+    function handleUASInput(uas) {
+      var v = uas.toUpperCase();
+      v = v.replace( /[^0-9A-F]/g, '');
+      uas = v;
 
-      // [??][P][SSS][GG][YY][ZZZ][XXX]
-      // ?? = Unknown
-      // P = Planet Index
-      // S = Star System Index
-      // G = Galaxy
-      // Y = Height
-      // Z = Width
-      // X = Length
+      if ( v.length == 12 ) {
+          UASInput.value = uas;
 
-      // [P][SSS][YY][ZZZ][XXX]
+          var galaxy = galaxyInput.value;
+          var xxx = parseInt(v.slice(9),16);
+          var yy = parseInt(v.slice(4,6),16);
+          var zzz = parseInt(v.slice(6,9),16);
+          var solaridx = parseInt(v.slice(1,4),16);
+          var planetidx = parseInt(v.slice(0,1),16);
 
+          decodeUA('00' + toHex1(planetidx) + toHex3( solaridx ) + galaxy + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ));
+      } else {
+          glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
+          UAInput.value = "";
+          GAInput.value = '';
+          UADecodedInput.value = '';
+          updateButtons();
+      }
+      return uas;
+    }
+
+    function handleGAInput() {
       var v = GAInput.value.toUpperCase();
 
       v = v.replace( /[^0-9A-F]/g, '');
@@ -942,94 +944,68 @@
 
       GAInput.value = v;
 
-      var l = v.length;
-
-      if ( l == 19 ) {
-          var galaxy = parseInt( galaxyInput.value, 16 );
+      if ( v.length == 19 ) {
+          var galaxy = galaxyInput.value;
           var xxx = ( parseInt(v.slice(0,4),16) + 0x801 ) & 0xfff;
           var yy =  ( parseInt(v.slice(5,9),16) + 0x81 ) & 0xff;
           var zzz = ( parseInt(v.slice(10,14),16) + 0x801 ) & 0xfff;
           var solaridx = parseInt(v.slice(16),16);
           var planetidx = planetInput.value;
 
-          UA = planetidx.toString() + toHex3( solaridx ) + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ) ;
-
-          updateGlyphs();
-          decodeUA();
+          decodeUA('00' + toHex1(planetidx) + toHex3( solaridx ) + galaxy + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ));
       } else {
-          UA = '';
+          UAS = '';
           glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UASInput.value = "";
           UAInput.value = "";
           UADecodedInput.value = '';
+          updateButtons();
       }
-      updateButtons();
     }
 
-    function getGlyphFromUAS() {
-      // [P][SSS][YY][ZZZ][XXX]
-      // P = Planet Index
-      // S = Star System Index
-      // Y = Height
-      // Z = Width
-      // X = Length
+    // [??][P][SSS][GG][YY][ZZZ][XXX]
+    // ?? = Unknown
+    // P = Planet Index
+    // S = Star System Index
+    // G = Galaxy
+    // Y = Height
+    // Z = Width
+    // X = Length
 
-      var v = UASInput.value.toUpperCase();
+    // [P][SSS][YY][ZZZ][XXX]
 
-      v = v.replace( /[^0-9A-F]/g, '');
+    // [XXXX]:[YYYY]:[ZZZZ]:[SSSS]
+    // X = Length - 0x801 & 0xfff
+    // Y = Height - 0x81 & 0xff
+    // Z = Width  - 0x801 & 0xfff
+    // S = Star System Index
 
-      UASInput.value = v;
-
-      var l = v.length;
-
-      if ( l == 12 ) {
-          var galaxy = parseInt( galaxyInput.value, 16 );
-          var xxx = parseInt(v.slice(9),16);
-          var yy = parseInt(v.slice(4,6),16);
-          var zzz = parseInt(v.slice(6,9),16);
-          var solaridx = parseInt(v.slice(1,4),16);
-          var planetidx = parseInt(v.slice(0,1),16);
-
-          UA = planetidx.toString() + toHex3( solaridx ) + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ) ;
-
-          updateGlyphs();
-          decodeUA();
-      } else {
-          UA = '';
-          glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
-          UAInput.value = "";
-          GAInput.value = '';
-          UADecodedInput.value = '';
-      }
-      updateButtons();
+    function encodeUA() {
+      var v = UAInput.value;
+      if ( v.length < 16 ) return;
+      var ua = v.slice(0,2) + toHex1(planetInput.value) + v.slice(3,6) + galaxyInput.value + v.slice(8);
+      UAInput.value = ua;
+      decodeUA(ua);
     }
 
-    function decodeUAwithPlanet() {
-        if ( UA.length < 12 ) return;
-        UA = planetInput.value.toString() + UA.slice(1);
-        updateGlyphs();
-        decodeUA();
-    }
+    function decodeUA(ua) {
+      if ( ua.length != 16 ) return;
 
-    function decodeUA() {
-      if ( UA.length != 12 ) {
-        return;
-      }
-      var galaxy = galaxyInput.value;
-      UAInput.value = '00' + UA.slice(0, 4) + galaxy + UA.slice(4);
-      
-      var xxx = parseInt(UA.slice(9),16);
-      var yy = parseInt(UA.slice(4,6),16);
-      var zzz = parseInt(UA.slice(6,9),16);
-      var solaridx = parseInt(UA.slice(1,4),16);
-      var planetidx = parseInt(UA.slice(0,1),16);
+      var galaxy = parseInt(ua.slice(6,8),16);
+      var xxx = parseInt(ua.slice(13),16);
+      var yy = parseInt(ua.slice(8,10),16);
+      var zzz = parseInt(ua.slice(10,13),16);
+      var solaridx = parseInt(ua.slice(3,6),16);
+      var planetidx = parseInt(ua.slice(2,3),16);
       
       var x = ( xxx & 0x800 ? -1 ^ 0xfff | xxx : xxx );
       var y = ( yy & 0x80 ? -1 ^ 0xff | yy : yy );
       var z = ( zzz & 0x800 ? -1 ^ 0xfff | zzz : zzz );
 
+      UAInput.value = ua;
+
       UADecodedInput.value = `{
-  "RealityIndex":`+parseInt(galaxy,16)+`,
+  "RealityIndex":`+galaxy+`,
   "GalacticAddress":{
     "VoxelX":`+x+`,
     "VoxelY":`+y+`,
@@ -1039,14 +1015,18 @@
   }
 }`;
 
-      UASInput.value = UA;
+      UAS = toHex1(planetidx) + toHex3( solaridx ) + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ) ;
 
+      UASInput.value = UAS;
+
+      galaxyInput.options.selectedIndex = galaxy;
       planetInput.options.selectedIndex = planetidx;
 
       var GA = ( toHex4( ( xxx - 0x801 ) & 0xfff ) ) + ':' + ( toHex4( ( yy - 0x81 ) & 0xff ) ) + ':' + ( toHex4( ( zzz - 0x801 ) & 0xfff ) ) + ':' + toHex4( solaridx );
 
       GAInput.value = GA;
 
+      updateGlyphs();
       updateButtons();
     }
     
@@ -1093,6 +1073,21 @@
           alert('Error copying UA (Decoded) to clipboard.');
       });
     }
+
+    function copyLink() {
+      var urlString = window.location.href;
+      urlString = urlString.replace( /\?.*/g, '');
+
+      var v = urlString + '?UA=' + UAInput.value;
+      navigator.clipboard.writeText(v)
+      .then(function() {
+          showMessage();
+      })
+      .catch(function() {
+          alert('Error copying link to clipboard.');
+      });
+    }
+
 </script>
 </body>
 </html>
