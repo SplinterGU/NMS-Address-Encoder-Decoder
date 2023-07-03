@@ -56,7 +56,7 @@
     font-size: 12px;
   }
 
-  #UA, #GA {
+  #UA, #GA, #UAS {
     background-color: white;
     color: black;
     padding: 10px;
@@ -549,7 +549,10 @@
     <label for="UA">Universal Address:</label>
     <input type="text" id="UA" maxlength="16" placeholder="or type UA here">
   </div>
-
+  <div>
+    <label for="UAS">Universal Address (short):</label>
+    <input type="text" id="UAS" maxlength="12" placeholder="or type UA (short) here">
+  </div>
   <div>
     <label for="UA_decoded" style="vertical-align: middle;">Universal Address (Decoded):</label>
     <textarea id="UA_decoded" rows="10" readonly style="vertical-align: middle;"></textarea>
@@ -604,6 +607,7 @@
     var glyph = document.getElementById('glyph');
     var UAInput = document.getElementById('UA');
     var GAInput = document.getElementById('GA');
+    var UASInput = document.getElementById('UAS');
     var UADecodedInput = document.getElementById('UA_decoded');
     var galaxyInput = document.getElementById('galaxy');
     var planetInput = document.getElementById('planet');
@@ -618,6 +622,10 @@
         getGlyphFromUA();
       }
     })
+
+    UASInput.addEventListener("input", function (e) {
+        getGlyphFromUAS();
+    });
 
     GAInput.addEventListener("input", function (e) {
         var GAInputCursorPos = GAInput.selectionStart;
@@ -857,7 +865,7 @@
 
     function getGlyphFromUA() {
       // [??][P][SSS][GG][YY][ZZZ][XXX]
-      // (? = Unknown
+      // ?? = Unknown
       // P = Planet Index
       // S = Star System Index
       // G = Galaxy
@@ -895,6 +903,7 @@
       } else {
           UA = '';
           glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
+          UASInput.value = "";
           GAInput.value = "";
           UADecodedInput.value = '';
       }
@@ -909,7 +918,7 @@
       // S = Star System Index
 
       // [??][P][SSS][GG][YY][ZZZ][XXX]
-      // (? = Unknown
+      // ?? = Unknown
       // P = Planet Index
       // S = Star System Index
       // G = Galaxy
@@ -939,7 +948,43 @@
           var solaridx = parseInt(v.slice(16),16);
           var planetidx = planetInput.value;
 
-          galaxyInput.options.selectedIndex = galaxy;
+          UA = planetidx.toString() + toHex3( solaridx ) + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ) ;
+
+          updateGlyphs();
+          decodeUA();
+      } else {
+          UA = '';
+          glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
+          UASInput.value = "";
+          UAInput.value = "";
+          UADecodedInput.value = '';
+      }
+      updateButtons();
+    }
+
+    function getGlyphFromUAS() {
+      // [P][SSS][YY][ZZZ][XXX]
+      // P = Planet Index
+      // S = Star System Index
+      // Y = Height
+      // Z = Width
+      // X = Length
+
+      var v = UASInput.value.toUpperCase();
+
+      v = v.replace( /[^0-9A-F]/g, '');
+
+      UASInput.value = v;
+
+      var l = v.length;
+
+      if ( l == 12 ) {
+          var galaxy = parseInt( galaxyInput.value, 16 );
+          var xxx = parseInt(v.slice(9),16);
+          var yy = parseInt(v.slice(4,6),16);
+          var zzz = parseInt(v.slice(6,9),16);
+          var solaridx = parseInt(v.slice(1,4),16);
+          var planetidx = parseInt(v.slice(0,1),16);
 
           UA = planetidx.toString() + toHex3( solaridx ) + toHex2( yy ) + toHex3( zzz ) + toHex3( xxx ) ;
 
@@ -949,6 +994,7 @@
           UA = '';
           glyph.innerHTML = '<div style="margin-top: auto; margin-bottom: auto; color: #bbb;">click the glyphs to select</div>';
           UAInput.value = "";
+          GAInput.value = "";
           UADecodedInput.value = '';
       }
       updateButtons();
@@ -988,6 +1034,8 @@
     "PlanetIndex":`+planetidx+`
   }
 }`;
+
+      UASInput.value = UA;
 
       planetInput.options.selectedIndex = planetidx;
 
