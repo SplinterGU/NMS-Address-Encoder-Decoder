@@ -22,7 +22,7 @@
       font-family: Arial;
     }
 
-    a:visited {
+    a, a:visited {
       color: white;
     }
 
@@ -86,6 +86,7 @@
       border: none;
       cursor: pointer;
       -webkit-border-radius:5px;
+      margin: 0px 5px 0px 5px; /* Agregado para separación horizontal */
     }
 
     .disableBtn {
@@ -94,12 +95,8 @@
 
     .button-container {
         display: flex;
-        gap: 10px;
-    }
-
-    textarea {
-      resize: none;
-      width: 400px;
+        margin: 10px 0 0 0;
+        align-items: center;
     }
 
     .msg {
@@ -173,8 +170,17 @@
 
     .input_container label{
       display: inline-block;
-      width: 200px;
+      width: 190px;
       text-align: right;
+    }
+
+    input[type=text] {
+      width: 200px;
+    }
+
+    textarea {
+      resize: none;
+      width: 400px;
     }
 
     input, textarea {
@@ -184,6 +190,11 @@
     .hover {
       background-color: lightgray;
     }
+
+    div .separator {
+      margin: 20px 0 0 0;
+    }
+
   </style>
 </head>
 <body>
@@ -221,13 +232,13 @@
 
 <canvas id="glyphs_img" width="400" height="70" crossorigin="anonymous"></canvas>
 
-<br>
+<div class="separator">&nbsp;</div>
 
 <div class="button-container">
     <button id="cleanBtn" onclick="clean()">Clear</button>
     <button id="deleteLastBtn" onclick="deleteLast()" disabled class="disableBtn">Delete Last Glyph</button>
 </div>
-<br>
+
 <div class="button-container">
     <button onclick="copyGA()" disabled class="copybtn disableBtn">Copy GA</button>
     <button onclick="copyUA()" disabled class="copybtn disableBtn">Copy UA</button>
@@ -236,7 +247,8 @@
     <button onclick="copyLink()" disabled class="copybtn disableBtn">Copy Share Link</button>
 </div>
 
-<br>
+<div class="separator">&nbsp;</div>
+<div class="separator">&nbsp;</div>
 
 <div>
   <label for="galaxy">Galaxy:</label>
@@ -529,7 +541,7 @@
   </div>
 </div>
 
-<br>
+<div class="separator">&nbsp;</div>
 
 <div style="text-align: right; font-size: 12px; width: 100%; margin: 0px 24px 12px 0px;"><a href="https://github.com/SplinterGU/nmsat">https://github.com/SplinterGU/nmsat</a> by SplinterGU</div>
 
