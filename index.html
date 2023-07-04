@@ -230,7 +230,7 @@
     <div onclick="concatID('F')" class="glyph-container"><img src="PORTALSYMBOL.F.png" class="image"><div class="image_num">F</div></div>
 </div>
 
-<canvas id="glyphs_img" width="400" height="70"></canvas>
+<canvas id="glyphs_img" width="400" height="74"></canvas>
 
 <div class="separator">&nbsp;</div>
 
@@ -902,7 +902,7 @@
       const x = 0;
       const y = 0;
       const width = 400;
-      const height = 70;
+      const height = 74;
       const cornerRadius = 5;
 
       context.strokeStyle = '#282828';
@@ -948,9 +948,14 @@
 
       if ( UAS.length == 12 ) {
         context.font = '12px Arial';
+        context.fillStyle = '#aaa';
+        context.textAlign = 'left';
+        context.fillText('by SplinterGU', 8, 70);
+
+        context.font = '14px Arial';
         context.fillStyle = '#bbb';
         context.textAlign = 'right';
-        context.fillText(galaxyInput.options[galaxyInput.selectedIndex].text, 400 - 8, 66);
+        context.fillText(galaxyInput.options[galaxyInput.selectedIndex].text, 400 - 8, 70);
       }
     }
 
