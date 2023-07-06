@@ -661,6 +661,7 @@
     }
 
     function setTransform() {
+      adjustXY();
       zoom.style.transform = "translate(" + ( pointX - zoom.parentElement.offsetLeft ) + "px, " + ( pointY - zoom.parentElement.offsetTop + document.documentElement.scrollTop ) + "px) scale(" + scale + ")";
       lastScrollTop = document.documentElement.scrollTop;
     }
@@ -678,7 +679,30 @@
     zoom.onmouseleave = function(e) {
       panning = false;
     }
-        
+
+    function adjustXY() {
+      var estilo = window.getComputedStyle(zoomImg);
+      var alto = parseInt(estilo.getPropertyValue("height"), 10);
+      var ancho = parseInt(estilo.getPropertyValue("width"), 10);
+      var topY = zoomImg.parentElement.parentElement.offsetTop - lastScrollTop;
+      var bottomY = zoomImg.parentElement.parentElement.offsetTop + zoomImg.parentElement.parentElement.offsetHeight - lastScrollTop;
+
+      if ( scale >= 1 ) {
+        if ( pointX > 0 ) pointX = 0;
+        if ( pointX + ( ancho * scale ) < ancho ) pointX = ancho - ( ancho * scale );
+
+        if ( pointY > topY ) pointY = topY;
+        if ( pointY + ( alto * scale ) < bottomY ) pointY = topY - ( alto * scale ) + zoomImg.parentElement.parentElement.offsetHeight;
+
+      } else {
+        if ( pointX < 0 ) pointX = 0;
+        if ( pointX + ( ancho * scale ) > ancho ) pointX = ancho - ( ancho * scale );
+
+        if ( pointY < topY ) pointY = topY;
+        if ( pointY + ( alto * scale ) > bottomY ) pointY = topY - ( alto * scale ) + zoomImg.parentElement.parentElement.offsetHeight;
+      }
+    }
+
     zoom.onmousemove = function (e) {
       e.preventDefault();
       if (!panning) {
@@ -686,6 +710,7 @@
       }
       pointX = (e.clientX - start.x);
       pointY = (e.clientY - start.y);
+
       setTransform();
     }
     
@@ -695,8 +720,11 @@
           ys = (e.clientY - pointY) / scale,
           delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
       (delta > 0) ? (scale *= 1.2) : (scale /= 1.2);
+      if ( scale > 10 ) scale = 10;
+      if ( scale < 0.2 ) scale = 0.2;
       pointX = e.clientX - xs * scale;
-      pointY = e.clientY - ys * scale;    
+      pointY = e.clientY - ys * scale;
+
       setTransform();
     }
 
