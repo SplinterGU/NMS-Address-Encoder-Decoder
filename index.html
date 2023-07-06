@@ -687,17 +687,18 @@
       var topY = zoomImg.parentElement.parentElement.offsetTop - lastScrollTop;
       var bottomY = zoomImg.parentElement.parentElement.offsetTop + zoomImg.parentElement.parentElement.offsetHeight - lastScrollTop;
 
-      if ( scale >= 1 ) {
+      if ( ancho * scale >= ancho ) {
         if ( pointX > 0 ) pointX = 0;
         if ( pointX + ( ancho * scale ) < ancho ) pointX = ancho - ( ancho * scale );
-
-        if ( pointY > topY ) pointY = topY;
-        if ( pointY + ( alto * scale ) < bottomY ) pointY = topY - ( alto * scale ) + zoomImg.parentElement.parentElement.offsetHeight;
-
       } else {
         if ( pointX < 0 ) pointX = 0;
         if ( pointX + ( ancho * scale ) > ancho ) pointX = ancho - ( ancho * scale );
+      }
 
+      if ( alto * scale >= bottomY - topY ) {
+        if ( pointY > topY ) pointY = topY;
+        if ( pointY + ( alto * scale ) < bottomY ) pointY = topY - ( alto * scale ) + zoomImg.parentElement.parentElement.offsetHeight;
+      } else {
         if ( pointY < topY ) pointY = topY;
         if ( pointY + ( alto * scale ) > bottomY ) pointY = topY - ( alto * scale ) + zoomImg.parentElement.parentElement.offsetHeight;
       }
