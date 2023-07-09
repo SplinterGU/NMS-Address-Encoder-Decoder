@@ -188,8 +188,8 @@
       margin: 20px 0 0 0;
     }
 
-    /* Media query para ajustar la clase input_container cuando no cabe en el ancho */
-    @media (max-width: 600px) {
+    /* Media query to adjust the input_container class when it doesn't fit in the width */
+    @media (max-width: 780px) {
       .input_container {
         flex-direction: column;
         align-items: center;
@@ -206,19 +206,20 @@
 </head>
 <body>
   <h1><u>NMS Address Translator</u></h1>
-  <div id="div_file">
-    <p id="text" onclick="fileInput.click()">Open images</p><input type="file" id="fileInput" webkitdirectory multiple>
+  <div id="image-section" style="display: none;">
+    <div id="div_file">
+      <p id="text" onclick="fileInput.click()">Open images</p><input type="file" id="fileInput" webkitdirectory multiple>
+    </div>
+    <p>(or drag & drop images)</p>
+    <div id="thumbnails"></div>
+    <div class="zoom_outer" id="resizeable" style="width: 100%; height: 100px; border: 1px solid white; position: relative; display: none;">
+      <div id="zoom">
+        <img id="zoomImg">
+      </div>
+      <div id="resize-handle" style="width: 100%; height: 5px; background-color: #888; position: absolute; bottom: 0; right: 0; cursor: ns-resize;"></div>
+    </div>
   </div>
-  <p>(or drag & drop images)</p>
-  <div id="thumbnails"></div>
-  <div class="zoom_outer" id="resizeable" style="width: 100%; height: 100px; border: 1px solid white; position: relative; display: none;">
-    <div id="zoom">
-      <img id="zoomImg">
-  </div>
-  <div id="resize-handle" style="width: 100%; height: 5px; background-color: #888; position: absolute; bottom: 0; right: 0; cursor: ns-resize;">
-  </div>
-</div>
-<div class="container">
+  <div class="container">
     <div onclick="concatID('0')" class="glyph-container"><img src="PORTALSYMBOL.0.png" class="image"><div class="image_num">0</div></div>
     <div onclick="concatID('1')" class="glyph-container"><img src="PORTALSYMBOL.1.png" class="image"><div class="image_num">1</div></div>
     <div onclick="concatID('2')" class="glyph-container"><img src="PORTALSYMBOL.2.png" class="image"><div class="image_num">2</div></div>
@@ -235,328 +236,332 @@
     <div onclick="concatID('D')" class="glyph-container"><img src="PORTALSYMBOL.D.png" class="image"><div class="image_num">D</div></div>
     <div onclick="concatID('E')" class="glyph-container"><img src="PORTALSYMBOL.E.png" class="image"><div class="image_num">E</div></div>
     <div onclick="concatID('F')" class="glyph-container"><img src="PORTALSYMBOL.F.png" class="image"><div class="image_num">F</div></div>
-</div>
+  </div>
 
-<canvas id="glyphs_img" width="400" height="74"></canvas>
+  <canvas id="glyphs_img" width="400" height="74"></canvas>
 
-<div class="separator">&nbsp;</div>
+  <div class="separator">&nbsp;</div>
 
-<div class="button-container">
+  <div class="button-container">
     <button id="cleanBtn" onclick="clean()">Clear</button>
     <button id="deleteLastBtn" onclick="deleteLast()" disabled class="disableBtn">Delete Last Glyph</button>
-</div>
+  </div>
 
-<div class="button-container">
+  <div class="button-container">
     <button onclick="copyGA()" disabled class="copybtn disableBtn">Copy GA</button>
     <button onclick="copyUA()" disabled class="copybtn disableBtn">Copy UA</button>
     <button onclick="copyUAS()" disabled class="copybtn disableBtn">Copy UA (short)</button>
     <button onclick="copyUADecoded()" disabled class="copybtn disableBtn">Copy UA (Decoded)</button>
     <button onclick="copyLink()" disabled class="copybtn disableBtn">Copy Share Link</button>
-</div>
-
-<div class="separator">&nbsp;</div>
-<div class="separator">&nbsp;</div>
-
-<div>
-  <label for="galaxy">Galaxy:</label>
-  <select id="galaxy" onchange="encodeUA()">
-    <option value="00">1.Euclid</option>
-    <option value="01">2.Hilbert Dimension</option>
-    <option value="02">3.Calypso</option>
-    <option value="03">4.Hesperius Dimension</option>
-    <option value="04">5.Hyades</option>
-    <option value="05">6.Ickjamatew</option>
-    <option value="06">7.Budullangr</option>
-    <option value="07">8.Kikolgallr</option>
-    <option value="08">9.Eltiensleen</option>
-    <option value="09">10.Eissentam</option>
-    <option value="0A">11.Elkupalos</option>
-    <option value="0B">12.Aptarkaba</option>
-    <option value="0C">13.Ontiniangp</option>
-    <option value="0D">14.Odiwagiri</option>
-    <option value="0E">15.Ogtialabi</option>
-    <option value="0F">16.Muhacksonto</option>
-    <option value="10">17.Hitonskyer</option>
-    <option value="11">18.Rerasmutul</option>
-    <option value="12">19.Isdoraijung</option>
-    <option value="13">20.Doctinawyra</option>
-    <option value="14">21.Loychazinq</option>
-    <option value="15">22.Zukasizawa</option>
-    <option value="16">23.Ekwathore</option>
-    <option value="17">24.Yeberhahne</option>
-    <option value="18">25.Twerbetek</option>
-    <option value="19">26.Sivarates</option>
-    <option value="1A">27.Eajerandal</option>
-    <option value="1B">28.Aldukesci</option>
-    <option value="1C">29.Wotyarogii</option>
-    <option value="1D">30.Sudzerbal</option>
-    <option value="1E">31.Maupenzhay</option>
-    <option value="1F">32.Sugueziume</option>
-    <option value="20">33.Brogoweldian</option>
-    <option value="21">34.Ehbogdenbu</option>
-    <option value="22">35.Ijsenufryos</option>
-    <option value="23">36.Nipikulha</option>
-    <option value="24">37.Autsurabin</option>
-    <option value="25">38.Lusontrygiamh</option>
-    <option value="26">39.Rewmanawa</option>
-    <option value="27">40.Ethiophodhe</option>
-    <option value="28">41.Urastrykle</option>
-    <option value="29">42.Xobeurindj</option>
-    <option value="2A">43.Oniijialdu</option>
-    <option value="2B">44.Wucetosucc</option>
-    <option value="2C">45.Ebyeloofdud</option>
-    <option value="2D">46.Odyavanta</option>
-    <option value="2E">47.Milekistri</option>
-    <option value="2F">48.Waferganh</option>
-    <option value="30">49.Agnusopwit</option>
-    <option value="31">50.Teyaypilny</option>
-    <option value="32">51.Zalienkosm</option>
-    <option value="33">52.Ladgudiraf</option>
-    <option value="34">53.Mushonponte</option>
-    <option value="35">54.Amsentisz</option>
-    <option value="36">55.Fladiselm</option>
-    <option value="37">56.Laanawemb</option>
-    <option value="38">57.Ilkerloor</option>
-    <option value="39">58.Davanossi</option>
-    <option value="3A">59.Ploehrliou</option>
-    <option value="3B">60.Corpinyaya</option>
-    <option value="3C">61.Leckandmeram</option>
-    <option value="3D">62.Quulngais</option>
-    <option value="3E">63.Nokokipsechl</option>
-    <option value="3F">64.Rinblodesa</option>
-    <option value="40">65.Loydporpen</option>
-    <option value="41">66.Ibtrevskip</option>
-    <option value="42">67.Elkowaldb</option>
-    <option value="43">68.Heholhofsko</option>
-    <option value="44">69.Yebrilowisod</option>
-    <option value="45">70.Husalvangewi</option>
-    <option value="46">71.Ovna'uesed</option>
-    <option value="47">72.Bahibusey</option>
-    <option value="48">73.Nuybeliaure</option>
-    <option value="49">74.Doshawchuc</option>
-    <option value="4A">75.Ruckinarkh</option>
-    <option value="4B">76.Thorettac</option>
-    <option value="4C">77.Nuponoparau</option>
-    <option value="4D">78.Moglaschil</option>
-    <option value="4E">79.Uiweupose</option>
-    <option value="4F">80.Nasmilete</option>
-    <option value="50">81.Ekdaluskin</option>
-    <option value="51">82.Hakapanasy</option>
-    <option value="52">83.Dimonimba</option>
-    <option value="53">84.Cajaccari</option>
-    <option value="54">85.Olonerovo</option>
-    <option value="55">86.Umlanswick</option>
-    <option value="56">87.Henayliszm</option>
-    <option value="57">88.Utzenmate</option>
-    <option value="58">89.Umirpaiya</option>
-    <option value="59">90.Paholiang</option>
-    <option value="5A">91.Iaereznika</option>
-    <option value="5B">92.Yudukagath</option>
-    <option value="5C">93.Boealalosnj</option>
-    <option value="5D">94.Yaevarcko</option>
-    <option value="5E">95.Coellosipp</option>
-    <option value="5F">96.Wayndohalou</option>
-    <option value="60">97.Smoduraykl</option>
-    <option value="61">98.Apmaneessu</option>
-    <option value="62">99.Hicanpaav</option>
-    <option value="63">100.Akvasanta</option>
-    <option value="64">101.Tuychelisaor</option>
-    <option value="65">102.Rivskimbe</option>
-    <option value="66">103.Daksanquix</option>
-    <option value="67">104.Kissonlin</option>
-    <option value="68">105.Aediabiel</option>
-    <option value="69">106.Ulosaginyik</option>
-    <option value="6A">107.Roclaytonycar</option>
-    <option value="6B">108.Kichiaroa</option>
-    <option value="6C">109.Irceauffey</option>
-    <option value="6D">110.Nudquathsenfe</option>
-    <option value="6E">111.Getaizakaal</option>
-    <option value="6F">112.Hansolmien</option>
-    <option value="70">113.Bloytisagra</option>
-    <option value="71">114.Ladsenlay</option>
-    <option value="72">115.Luyugoslasr</option>
-    <option value="73">116.Ubredhatk</option>
-    <option value="74">117.Cidoniana</option>
-    <option value="75">118.Jasinessa</option>
-    <option value="76">119.Torweierf</option>
-    <option value="77">120.Saffneckm</option>
-    <option value="78">121.Thnistner</option>
-    <option value="79">122.Dotusingg</option>
-    <option value="7A">123.Luleukous</option>
-    <option value="7B">124.Jelmandan</option>
-    <option value="7C">125.Otimanaso</option>
-    <option value="7D">126.Enjaxusanto</option>
-    <option value="7E">127.Sezviktorew</option>
-    <option value="7F">128.Zikehpm</option>
-    <option value="80">129.Bephembah</option>
-    <option value="81">130.Broomerrai</option>
-    <option value="82">131.Meximicka</option>
-    <option value="83">132.Venessika</option>
-    <option value="84">133.Gaiteseling</option>
-    <option value="85">134.Zosakasiro</option>
-    <option value="86">135.Drajayanes</option>
-    <option value="87">136.Ooibekuar</option>
-    <option value="88">137.Urckiansi</option>
-    <option value="89">138.Dozivadido</option>
-    <option value="8A">139.Emiekereks</option>
-    <option value="8B">140.Meykinunukur</option>
-    <option value="8C">141.Kimycuristh</option>
-    <option value="8D">142.Roansfien</option>
-    <option value="8E">143.Isgarmeso</option>
-    <option value="8F">144.Daitibeli</option>
-    <option value="90">145.Gucuttarik</option>
-    <option value="91">146.Enlaythie</option>
-    <option value="92">147.Drewweste</option>
-    <option value="93">148.Akbulkabi</option>
-    <option value="94">149.Homskiw</option>
-    <option value="95">150.Zavainlani</option>
-    <option value="96">151.Jewijkmas</option>
-    <option value="97">152.Itlhotagra</option>
-    <option value="98">153.Podalicess</option>
-    <option value="99">154.Hiviusauer</option>
-    <option value="9A">155.Halsebenk</option>
-    <option value="9B">156.Puikitoac</option>
-    <option value="9C">157.Gaybakuaria</option>
-    <option value="9D">158.Grbodubhe</option>
-    <option value="9E">159.Rycempler</option>
-    <option value="9F">160.Indjalala</option>
-    <option value="A0">161.Fontenikk</option>
-    <option value="A1">162.Pasycihelwhee</option>
-    <option value="A2">163.Ikbaksmit</option>
-    <option value="A3">164.Telicianses</option>
-    <option value="A4">165.Oyleyzhan</option>
-    <option value="A5">166.Uagerosat</option>
-    <option value="A6">167.Impoxectin</option>
-    <option value="A7">168.Twoodmand</option>
-    <option value="A8">169.Hilfsesorbs</option>
-    <option value="A9">170.Ezdaranit</option>
-    <option value="AA">171.Wiensanshe</option>
-    <option value="AB">172.Ewheelonc</option>
-    <option value="AC">173.Litzmantufa</option>
-    <option value="AD">174.Emarmatosi</option>
-    <option value="AE">175.Mufimbomacvi</option>
-    <option value="AF">176.Wongquarum</option>
-    <option value="B0">177.Hapirajua</option>
-    <option value="B1">178.Igbinduina</option>
-    <option value="B2">179.Wepaitvas</option>
-    <option value="B3">180.Sthatigudi</option>
-    <option value="B4">181.Yekathsebehn</option>
-    <option value="B5">182.Ebedeagurst</option>
-    <option value="B6">183.Nolisonia</option>
-    <option value="B7">184.Ulexovitab</option>
-    <option value="B8">185.Iodhinxois</option>
-    <option value="B9">186.Irroswitzs</option>
-    <option value="BA">187.Bifredait</option>
-    <option value="BB">188.Beiraghedwe</option>
-    <option value="BC">189.Yeonatlak</option>
-    <option value="BD">190.Cugnatachh</option>
-    <option value="BE">191.Nozoryenki</option>
-    <option value="BF">192.Ebralduri</option>
-    <option value="C0">193.Evcickcandj</option>
-    <option value="C1">194.Ziybosswin</option>
-    <option value="C2">195.Heperclait</option>
-    <option value="C3">196.Sugiuniam</option>
-    <option value="C4">197.Aaseertush</option>
-    <option value="C5">198.Uglyestemaa</option>
-    <option value="C6">199.Horeroedsh</option>
-    <option value="C7">200.Drundemiso</option>
-    <option value="C8">201.Ityanianat</option>
-    <option value="C9">202.Purneyrine</option>
-    <option value="CA">203.Dokiessmat</option>
-    <option value="CB">204.Nupiacheh</option>
-    <option value="CC">205.Dihewsonj</option>
-    <option value="CD">206.Rudrailhik</option>
-    <option value="CE">207.Tweretnort</option>
-    <option value="CF">208.Snatreetze</option>
-    <option value="D0">209.Iwundaracos</option>
-    <option value="D1">210.Digarlewena</option>
-    <option value="D2">211.Erquagsta</option>
-    <option value="D3">212.Logovoloin</option>
-    <option value="D4">213.Boyaghosganh</option>
-    <option value="D5">214.Kuolungau</option>
-    <option value="D6">215.Pehneldept</option>
-    <option value="D7">216.Yevettiiqidcon</option>
-    <option value="D8">217.Sahliacabru</option>
-    <option value="D9">218.Noggalterpor</option>
-    <option value="DA">219.Chmageaki</option>
-    <option value="DB">220.Veticueca</option>
-    <option value="DC">221.Vittesbursul</option>
-    <option value="DD">222.Nootanore</option>
-    <option value="DE">223.Innebdjerah</option>
-    <option value="DF">224.Kisvarcini</option>
-    <option value="E0">225.Cuzcogipper</option>
-    <option value="E1">226.Pamanhermonsu</option>
-    <option value="E2">227.Brotoghek</option>
-    <option value="E3">228.Mibittara</option>
-    <option value="E4">229.Huruahili</option>
-    <option value="E5">230.Raldwicarn</option>
-    <option value="E6">231.Ezdartlic</option>
-    <option value="E7">232.Badesclema</option>
-    <option value="E8">233.Isenkeyan</option>
-    <option value="E9">234.Iadoitesu</option>
-    <option value="EA">235.Yagrovoisi</option>
-    <option value="EB">236.Ewcomechio</option>
-    <option value="EC">237.Inunnunnoda</option>
-    <option value="ED">238.Dischiutun</option>
-    <option value="EE">239.Yuwarugha</option>
-    <option value="EF">240.Ialmendra</option>
-    <option value="F0">241.Reponudrle</option>
-    <option value="F1">242.Rinjanagrbo</option>
-    <option value="F2">243.Zeziceloh</option>
-    <option value="F3">244.Oeileutasc</option>
-    <option value="F4">245.Zicniijinis</option>
-    <option value="F5">246.Dugnowarilda</option>
-    <option value="F6">247.Neuxoisan</option>
-    <option value="F7">248.Ilmenhorn</option>
-    <option value="F8">249.Rukwatsuku</option>
-    <option value="F9">250.Nepitzaspru</option>
-    <option value="FA">251.Chcehoemig</option>
-    <option value="FB">252.Haffneyrin</option>
-    <option value="FC">253.Uliciawai</option>
-    <option value="FD">254.Tuhgrespod</option>
-    <option value="FE">255.Iousongola</option>
-    <option value="FF">256.Odyalutai</option>
-  </select>
-  <label for="planet">Planet:</label>
-  <select id="planet" onchange="encodeUA()">
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-  </select>
-</div>
-
-<div class="input_container">
-  <div>
-    <label for="GA">Galactic Address:</label>
-    <input type="text" id="GA" maxlength="19" placeholder="or type GA here">
   </div>
+
+  <div class="separator">&nbsp;</div>
+  <div class="separator">&nbsp;</div>
+
   <div>
-    <label for="UA">Universal Address:</label>
-    <input type="text" id="UA" maxlength="16" placeholder="or type UA here">
+    <label for="galaxy">Galaxy:</label>
+    <select id="galaxy" onchange="encodeUA()">
+      <option value="00">1.Euclid</option>
+      <option value="01">2.Hilbert Dimension</option>
+      <option value="02">3.Calypso</option>
+      <option value="03">4.Hesperius Dimension</option>
+      <option value="04">5.Hyades</option>
+      <option value="05">6.Ickjamatew</option>
+      <option value="06">7.Budullangr</option>
+      <option value="07">8.Kikolgallr</option>
+      <option value="08">9.Eltiensleen</option>
+      <option value="09">10.Eissentam</option>
+      <option value="0A">11.Elkupalos</option>
+      <option value="0B">12.Aptarkaba</option>
+      <option value="0C">13.Ontiniangp</option>
+      <option value="0D">14.Odiwagiri</option>
+      <option value="0E">15.Ogtialabi</option>
+      <option value="0F">16.Muhacksonto</option>
+      <option value="10">17.Hitonskyer</option>
+      <option value="11">18.Rerasmutul</option>
+      <option value="12">19.Isdoraijung</option>
+      <option value="13">20.Doctinawyra</option>
+      <option value="14">21.Loychazinq</option>
+      <option value="15">22.Zukasizawa</option>
+      <option value="16">23.Ekwathore</option>
+      <option value="17">24.Yeberhahne</option>
+      <option value="18">25.Twerbetek</option>
+      <option value="19">26.Sivarates</option>
+      <option value="1A">27.Eajerandal</option>
+      <option value="1B">28.Aldukesci</option>
+      <option value="1C">29.Wotyarogii</option>
+      <option value="1D">30.Sudzerbal</option>
+      <option value="1E">31.Maupenzhay</option>
+      <option value="1F">32.Sugueziume</option>
+      <option value="20">33.Brogoweldian</option>
+      <option value="21">34.Ehbogdenbu</option>
+      <option value="22">35.Ijsenufryos</option>
+      <option value="23">36.Nipikulha</option>
+      <option value="24">37.Autsurabin</option>
+      <option value="25">38.Lusontrygiamh</option>
+      <option value="26">39.Rewmanawa</option>
+      <option value="27">40.Ethiophodhe</option>
+      <option value="28">41.Urastrykle</option>
+      <option value="29">42.Xobeurindj</option>
+      <option value="2A">43.Oniijialdu</option>
+      <option value="2B">44.Wucetosucc</option>
+      <option value="2C">45.Ebyeloofdud</option>
+      <option value="2D">46.Odyavanta</option>
+      <option value="2E">47.Milekistri</option>
+      <option value="2F">48.Waferganh</option>
+      <option value="30">49.Agnusopwit</option>
+      <option value="31">50.Teyaypilny</option>
+      <option value="32">51.Zalienkosm</option>
+      <option value="33">52.Ladgudiraf</option>
+      <option value="34">53.Mushonponte</option>
+      <option value="35">54.Amsentisz</option>
+      <option value="36">55.Fladiselm</option>
+      <option value="37">56.Laanawemb</option>
+      <option value="38">57.Ilkerloor</option>
+      <option value="39">58.Davanossi</option>
+      <option value="3A">59.Ploehrliou</option>
+      <option value="3B">60.Corpinyaya</option>
+      <option value="3C">61.Leckandmeram</option>
+      <option value="3D">62.Quulngais</option>
+      <option value="3E">63.Nokokipsechl</option>
+      <option value="3F">64.Rinblodesa</option>
+      <option value="40">65.Loydporpen</option>
+      <option value="41">66.Ibtrevskip</option>
+      <option value="42">67.Elkowaldb</option>
+      <option value="43">68.Heholhofsko</option>
+      <option value="44">69.Yebrilowisod</option>
+      <option value="45">70.Husalvangewi</option>
+      <option value="46">71.Ovna'uesed</option>
+      <option value="47">72.Bahibusey</option>
+      <option value="48">73.Nuybeliaure</option>
+      <option value="49">74.Doshawchuc</option>
+      <option value="4A">75.Ruckinarkh</option>
+      <option value="4B">76.Thorettac</option>
+      <option value="4C">77.Nuponoparau</option>
+      <option value="4D">78.Moglaschil</option>
+      <option value="4E">79.Uiweupose</option>
+      <option value="4F">80.Nasmilete</option>
+      <option value="50">81.Ekdaluskin</option>
+      <option value="51">82.Hakapanasy</option>
+      <option value="52">83.Dimonimba</option>
+      <option value="53">84.Cajaccari</option>
+      <option value="54">85.Olonerovo</option>
+      <option value="55">86.Umlanswick</option>
+      <option value="56">87.Henayliszm</option>
+      <option value="57">88.Utzenmate</option>
+      <option value="58">89.Umirpaiya</option>
+      <option value="59">90.Paholiang</option>
+      <option value="5A">91.Iaereznika</option>
+      <option value="5B">92.Yudukagath</option>
+      <option value="5C">93.Boealalosnj</option>
+      <option value="5D">94.Yaevarcko</option>
+      <option value="5E">95.Coellosipp</option>
+      <option value="5F">96.Wayndohalou</option>
+      <option value="60">97.Smoduraykl</option>
+      <option value="61">98.Apmaneessu</option>
+      <option value="62">99.Hicanpaav</option>
+      <option value="63">100.Akvasanta</option>
+      <option value="64">101.Tuychelisaor</option>
+      <option value="65">102.Rivskimbe</option>
+      <option value="66">103.Daksanquix</option>
+      <option value="67">104.Kissonlin</option>
+      <option value="68">105.Aediabiel</option>
+      <option value="69">106.Ulosaginyik</option>
+      <option value="6A">107.Roclaytonycar</option>
+      <option value="6B">108.Kichiaroa</option>
+      <option value="6C">109.Irceauffey</option>
+      <option value="6D">110.Nudquathsenfe</option>
+      <option value="6E">111.Getaizakaal</option>
+      <option value="6F">112.Hansolmien</option>
+      <option value="70">113.Bloytisagra</option>
+      <option value="71">114.Ladsenlay</option>
+      <option value="72">115.Luyugoslasr</option>
+      <option value="73">116.Ubredhatk</option>
+      <option value="74">117.Cidoniana</option>
+      <option value="75">118.Jasinessa</option>
+      <option value="76">119.Torweierf</option>
+      <option value="77">120.Saffneckm</option>
+      <option value="78">121.Thnistner</option>
+      <option value="79">122.Dotusingg</option>
+      <option value="7A">123.Luleukous</option>
+      <option value="7B">124.Jelmandan</option>
+      <option value="7C">125.Otimanaso</option>
+      <option value="7D">126.Enjaxusanto</option>
+      <option value="7E">127.Sezviktorew</option>
+      <option value="7F">128.Zikehpm</option>
+      <option value="80">129.Bephembah</option>
+      <option value="81">130.Broomerrai</option>
+      <option value="82">131.Meximicka</option>
+      <option value="83">132.Venessika</option>
+      <option value="84">133.Gaiteseling</option>
+      <option value="85">134.Zosakasiro</option>
+      <option value="86">135.Drajayanes</option>
+      <option value="87">136.Ooibekuar</option>
+      <option value="88">137.Urckiansi</option>
+      <option value="89">138.Dozivadido</option>
+      <option value="8A">139.Emiekereks</option>
+      <option value="8B">140.Meykinunukur</option>
+      <option value="8C">141.Kimycuristh</option>
+      <option value="8D">142.Roansfien</option>
+      <option value="8E">143.Isgarmeso</option>
+      <option value="8F">144.Daitibeli</option>
+      <option value="90">145.Gucuttarik</option>
+      <option value="91">146.Enlaythie</option>
+      <option value="92">147.Drewweste</option>
+      <option value="93">148.Akbulkabi</option>
+      <option value="94">149.Homskiw</option>
+      <option value="95">150.Zavainlani</option>
+      <option value="96">151.Jewijkmas</option>
+      <option value="97">152.Itlhotagra</option>
+      <option value="98">153.Podalicess</option>
+      <option value="99">154.Hiviusauer</option>
+      <option value="9A">155.Halsebenk</option>
+      <option value="9B">156.Puikitoac</option>
+      <option value="9C">157.Gaybakuaria</option>
+      <option value="9D">158.Grbodubhe</option>
+      <option value="9E">159.Rycempler</option>
+      <option value="9F">160.Indjalala</option>
+      <option value="A0">161.Fontenikk</option>
+      <option value="A1">162.Pasycihelwhee</option>
+      <option value="A2">163.Ikbaksmit</option>
+      <option value="A3">164.Telicianses</option>
+      <option value="A4">165.Oyleyzhan</option>
+      <option value="A5">166.Uagerosat</option>
+      <option value="A6">167.Impoxectin</option>
+      <option value="A7">168.Twoodmand</option>
+      <option value="A8">169.Hilfsesorbs</option>
+      <option value="A9">170.Ezdaranit</option>
+      <option value="AA">171.Wiensanshe</option>
+      <option value="AB">172.Ewheelonc</option>
+      <option value="AC">173.Litzmantufa</option>
+      <option value="AD">174.Emarmatosi</option>
+      <option value="AE">175.Mufimbomacvi</option>
+      <option value="AF">176.Wongquarum</option>
+      <option value="B0">177.Hapirajua</option>
+      <option value="B1">178.Igbinduina</option>
+      <option value="B2">179.Wepaitvas</option>
+      <option value="B3">180.Sthatigudi</option>
+      <option value="B4">181.Yekathsebehn</option>
+      <option value="B5">182.Ebedeagurst</option>
+      <option value="B6">183.Nolisonia</option>
+      <option value="B7">184.Ulexovitab</option>
+      <option value="B8">185.Iodhinxois</option>
+      <option value="B9">186.Irroswitzs</option>
+      <option value="BA">187.Bifredait</option>
+      <option value="BB">188.Beiraghedwe</option>
+      <option value="BC">189.Yeonatlak</option>
+      <option value="BD">190.Cugnatachh</option>
+      <option value="BE">191.Nozoryenki</option>
+      <option value="BF">192.Ebralduri</option>
+      <option value="C0">193.Evcickcandj</option>
+      <option value="C1">194.Ziybosswin</option>
+      <option value="C2">195.Heperclait</option>
+      <option value="C3">196.Sugiuniam</option>
+      <option value="C4">197.Aaseertush</option>
+      <option value="C5">198.Uglyestemaa</option>
+      <option value="C6">199.Horeroedsh</option>
+      <option value="C7">200.Drundemiso</option>
+      <option value="C8">201.Ityanianat</option>
+      <option value="C9">202.Purneyrine</option>
+      <option value="CA">203.Dokiessmat</option>
+      <option value="CB">204.Nupiacheh</option>
+      <option value="CC">205.Dihewsonj</option>
+      <option value="CD">206.Rudrailhik</option>
+      <option value="CE">207.Tweretnort</option>
+      <option value="CF">208.Snatreetze</option>
+      <option value="D0">209.Iwundaracos</option>
+      <option value="D1">210.Digarlewena</option>
+      <option value="D2">211.Erquagsta</option>
+      <option value="D3">212.Logovoloin</option>
+      <option value="D4">213.Boyaghosganh</option>
+      <option value="D5">214.Kuolungau</option>
+      <option value="D6">215.Pehneldept</option>
+      <option value="D7">216.Yevettiiqidcon</option>
+      <option value="D8">217.Sahliacabru</option>
+      <option value="D9">218.Noggalterpor</option>
+      <option value="DA">219.Chmageaki</option>
+      <option value="DB">220.Veticueca</option>
+      <option value="DC">221.Vittesbursul</option>
+      <option value="DD">222.Nootanore</option>
+      <option value="DE">223.Innebdjerah</option>
+      <option value="DF">224.Kisvarcini</option>
+      <option value="E0">225.Cuzcogipper</option>
+      <option value="E1">226.Pamanhermonsu</option>
+      <option value="E2">227.Brotoghek</option>
+      <option value="E3">228.Mibittara</option>
+      <option value="E4">229.Huruahili</option>
+      <option value="E5">230.Raldwicarn</option>
+      <option value="E6">231.Ezdartlic</option>
+      <option value="E7">232.Badesclema</option>
+      <option value="E8">233.Isenkeyan</option>
+      <option value="E9">234.Iadoitesu</option>
+      <option value="EA">235.Yagrovoisi</option>
+      <option value="EB">236.Ewcomechio</option>
+      <option value="EC">237.Inunnunnoda</option>
+      <option value="ED">238.Dischiutun</option>
+      <option value="EE">239.Yuwarugha</option>
+      <option value="EF">240.Ialmendra</option>
+      <option value="F0">241.Reponudrle</option>
+      <option value="F1">242.Rinjanagrbo</option>
+      <option value="F2">243.Zeziceloh</option>
+      <option value="F3">244.Oeileutasc</option>
+      <option value="F4">245.Zicniijinis</option>
+      <option value="F5">246.Dugnowarilda</option>
+      <option value="F6">247.Neuxoisan</option>
+      <option value="F7">248.Ilmenhorn</option>
+      <option value="F8">249.Rukwatsuku</option>
+      <option value="F9">250.Nepitzaspru</option>
+      <option value="FA">251.Chcehoemig</option>
+      <option value="FB">252.Haffneyrin</option>
+      <option value="FC">253.Uliciawai</option>
+      <option value="FD">254.Tuhgrespod</option>
+      <option value="FE">255.Iousongola</option>
+      <option value="FF">256.Odyalutai</option>
+    </select>
+    <label for="planet">Planet:</label>
+    <select id="planet" onchange="encodeUA()">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+    </select>
   </div>
-  <div>
-    <label for="UAS">Universal Address (short):</label>
-    <input type="text" id="UAS" maxlength="12" placeholder="or type UA (short) here">
+
+  <div class="input_container">
+    <div>
+      <label for="GA">Galactic Address:</label>
+      <input type="text" id="GA" maxlength="19" placeholder="or type GA here">
+    </div>
+    <div>
+      <label for="UA">Universal Address:</label>
+      <input type="text" id="UA" maxlength="16" placeholder="or type UA here">
+    </div>
+    <div>
+      <label for="UAS">Universal Address (short):</label>
+      <input type="text" id="UAS" maxlength="12" placeholder="or type UA (short) here">
+    </div>
+    <div>
+      <label for="UA_decoded" style="vertical-align: middle;">Universal Address (Decoded):</label>
+      <textarea id="UA_decoded" rows="10" readonly style="vertical-align: middle;"></textarea>
+    </div>
   </div>
-  <div>
-    <label for="UA_decoded" style="vertical-align: middle;">Universal Address (Decoded):</label>
-    <textarea id="UA_decoded" rows="10" readonly style="vertical-align: middle;"></textarea>
+  
+  <div class="separator">&nbsp;</div>
+  
+  <div style="text-align: right; font-size: 12px; width: 100%; margin: 0px 24px 12px 0px;"><a href="https://github.com/SplinterGU/nmsat">  https://github.com/SplinterGU/nmsat</a> by SplinterGU</div>  
+  
+  <div id="msg" class="msg">
+      Copied to clipboard!
   </div>
-</div>
 
-<div class="separator">&nbsp;</div>
+  <script>
+    if (!(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) || window.innerWidth <= 780)) {
+        document.getElementById("image-section").style.display = "block";
+    }
 
-<div style="text-align: right; font-size: 12px; width: 100%; margin: 0px 24px 12px 0px;"><a href="https://github.com/SplinterGU/nmsat">https://github.com/SplinterGU/nmsat</a> by SplinterGU</div>
-
-<div id="msg" class="msg">
-    Copied to clipboard!
-</div>
-
-<script>
     function showMessage() {
       var msg = document.getElementById("msg");
       msg.style.display = "block";
@@ -764,7 +769,6 @@
       }
 
       // Load images
-
       const images = [
         'PORTALSYMBOL.0.png',
         'PORTALSYMBOL.1.png',
@@ -1203,6 +1207,6 @@
     }
 
 
-</script>
+  </script>
 </body>
 </html>
