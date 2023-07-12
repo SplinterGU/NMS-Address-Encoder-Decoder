@@ -206,11 +206,13 @@
 </head>
 <body>
   <h1><u>NMS Address Translator</u></h1>
-  <div id="image-section" style="display: none;">
+  <div id="file-section" style="display: none;">
     <div id="div_file">
       <p id="text" onclick="fileInput.click()">Open images</p><input type="file" id="fileInput" webkitdirectory multiple>
     </div>
     <p>(or drag & drop images)</p>
+  </div>
+  <div id="image-section" style="display: none;">
     <div id="thumbnails"></div>
     <div class="zoom_outer" id="resizeable" style="width: 100%; height: 100px; border: 1px solid white; position: relative; display: none;">
       <div id="zoom">
@@ -560,6 +562,7 @@
   <script>
     if (!(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) || window.innerWidth <= 780)) {
         document.getElementById("image-section").style.display = "block";
+        document.getElementById("file-section").style.display = "block";
     }
 
     function showMessage() {
@@ -1201,11 +1204,6 @@
           alert('Error copying link to clipboard.');
       });
     }
-
-    function openFiles() {
-        ;
-    }
-
 
   </script>
 </body>
